@@ -178,12 +178,10 @@
 </div>
 
 <script>
-    // Live Render backend URL successfully integrated
     const API_URL = 'https://shraddha-hardware-backend-1.onrender.com/api/products';
     let allProducts = [];
     let isEditing = false;
 
-    // Form Submit handling (Insert OR Update)
     document.getElementById('inventory-form').addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -195,6 +193,10 @@
         const sellPrice = document.getElementById('sell-price').value;
         const stockInfo = document.getElementById('stock-info').value;
         const imageFile = document.getElementById('product-image').files[0];
+
+        // UI feedback trigger
+        submitBtn.innerText = 'Processing...';
+        submitBtn.disabled = true;
 
         const formData = new FormData();
         formData.append('name', name);
@@ -224,14 +226,26 @@
                 resetForm();
                 await loadProducts(); 
             } else {
-                alert('Server Error: ' + await response.text());
+                const errText = await response.text();
+                alert('Server Error: ' + errText);
+                console.error('Server detailed error:', errText);
             }
         } catch (error) {
-            alert('Transmission failure with host engine.');
+            alert('Transmission failure with host engine. Check internet or image size.');
+            console.error('Fetch operations failed:', error);
+        } finally {
+            // UI state restore
+            if (!isEditing) {
+                submitBtn.innerText = 'Commit Asset to Inventory';
+                submitBtn.style.background = '#00ffcc';
+            } else {
+                submitBtn.innerText = 'Save Changes';
+                submitBtn.style.background = '#ffcc00';
+            }
+            submitBtn.disabled = false;
         }
     });
 
-    // Load items from backend database
     async function loadProducts() {
         try {
             const response = await fetch(API_URL);
@@ -239,7 +253,7 @@
             allProducts = await response.json();
             renderProducts(allProducts);
         } catch (error) {
-            console.error(error);
+            console.error('Database fetching failed:', error);
         }
     }
 
@@ -280,7 +294,6 @@
         });
     }
 
-    // Delete Operations targeting item index
     async function deleteProduct(id) {
         if (!confirm('Are you sure you want to purge this record from database?')) return;
         try {
@@ -296,7 +309,6 @@
         }
     }
 
-    // Populate data back to inputs for editing 
     function editProduct(id) {
         const prod = allProducts.find(p => p.id === id);
         if (!prod) return;
@@ -323,7 +335,6 @@
         isEditing = false;
     }
 
-    // Search query mapping 
     document.getElementById('search-bar').addEventListener('input', function(e) {
         const searchText = e.target.value.toLowerCase();
         const filtered = allProducts.filter(prod => prod.name.toLowerCase().includes(searchText));
@@ -334,4 +345,5 @@
 </script>
 </body>
 </html>
+
 
