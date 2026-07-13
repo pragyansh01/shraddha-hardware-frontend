@@ -178,7 +178,8 @@
 </div>
 
 <script>
-    const API_URL = 'http://127.0.0.1:8080/api/products';
+    // Live Render backend URL successfully integrated
+    const API_URL = 'https://shraddha-hardware-backend-1.onrender.com/api/products';
     let allProducts = [];
     let isEditing = false;
 
@@ -209,7 +210,7 @@
 
         if (isEditing) {
             url = `${API_URL}/${prodId}`;
-            method = 'PUT'; // Backend Update route configuration mapping
+            method = 'PUT';
         }
 
         try {
@@ -230,7 +231,7 @@
         }
     });
 
-    // Database load block + fixing undefined error mapping
+    // Load items from backend database
     async function loadProducts() {
         try {
             const response = await fetch(API_URL);
@@ -254,7 +255,6 @@
         productsToDisplay.forEach(prod => {
             const imageSrc = prod.image ? `data:image/jpeg;base64,${prod.image}` : 'https://via.placeholder.com/85?text=No+Image';
             
-            // Fixed variable mappings from Java backend keys (handling snake_case fallbacks)
             const name = prod.name || 'Unknown Item';
             const stock = prod.stockInfo || prod.stock_info || 'N/A';
             const bPrice = prod.buyPrice || prod.buy_price || '0';
@@ -280,7 +280,7 @@
         });
     }
 
-    // Delete Operations controller targeting row identity 
+    // Delete Operations targeting item index
     async function deleteProduct(id) {
         if (!confirm('Are you sure you want to purge this record from database?')) return;
         try {
@@ -323,7 +323,7 @@
         isEditing = false;
     }
 
-    // Search trigger setup 
+    // Search query mapping 
     document.getElementById('search-bar').addEventListener('input', function(e) {
         const searchText = e.target.value.toLowerCase();
         const filtered = allProducts.filter(prod => prod.name.toLowerCase().includes(searchText));
@@ -334,3 +334,4 @@
 </script>
 </body>
 </html>
+
