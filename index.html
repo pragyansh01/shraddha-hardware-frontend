@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shraddha Hardware Store</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            border: 1px solid #2d2d2d;
+        }
+        h2, h3 {
+            color: #00ffcc;
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaaaaa;
+            font-size: 14px;
+        }
+        input[type="text"], input[type="number"], input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #3a3a3a;
+            background: #262626;
+            color: #ffffff;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #00ffcc;
+            color: #121212;
+            border: none;
+            padding: 14px 20px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #00ccaa;
+        }
+        .inventory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            margin-bottom: 15px;
+        }
+        .inventory-header h3 {
+            margin: 0;
+        }
+        #search-bar {
+            width: 250px;
+            padding: 8px 12px;
+            border: 1px solid #00ffcc;
+            background: #1a1a1a;
+            color: white;
+            border-radius: 20px;
+            outline: none;
+        }
+        #inventory-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .card {
+            background: #262626;
+            padding: 18px;
+            border-radius: 8px;
+            border-left: 5px solid #00ffcc;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .card-main {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .card img {
+            width: 85px;
+            height: 85px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+        }
+        .card-details h4 {
+            margin: 0 0 8px 0;
+            color: #ffffff;
+        }
+        .card-details p {
+            margin: 4px 0;
+            font-size: 14px;
+            color: #b3b3b3;
+        }
+        .card-details b {
+            color: #00ffcc;
+        }
+        .action-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .btn-edit {
+            background: #ffcc00;
+            color: #121212;
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+        .btn-edit:hover { background: #d4af37; }
+        .btn-delete {
+            background: #ff3333;
+            color: white;
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+        .btn-delete:hover { background: #cc0000; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 id="form-title">📦 Stock Inward (New Asset)</h2>
+    <form id="inventory-form">
+        <input type="hidden" id="product-id">
+        <div class="form-group">
+            <label>Product Name</label>
+            <input type="text" id="product-name" required placeholder="e.g., Hammer, Plier">
+        </div>
+        <div class="form-group">
+            <label>Buying Price (₹)</label>
+            <input type="number" id="buy-price" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label>Selling Price (₹)</label>
+            <input type="number" id="sell-price" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label>Stock Quantity / Info</label>
+            <input type="text" id="stock-info" required placeholder="e.g., 50 units, 10 packets">
+        </div>
+        <div class="form-group">
+            <label>Product Image</label>
+            <input type="file" id="product-image" accept="image/*">
+        </div>
+        <button type="submit" id="submit-btn">Commit Asset to Inventory</button>
+    </form>
+
+    <div class="inventory-header">
+        <h3>📋 Current Inventory</h3>
+        <input type="text" id="search-bar" placeholder="🔍 Search items...">
+    </div>
+    <div id="inventory-list"></div>
+</div>
+
+<script>
+    const API_URL = 'http://127.0.0.1:8080/api/products';
+    let allProducts = [];
+    let isEditing = false;
+
+    // Form Submit handling (Insert OR Update)
+    document.getElementById('inventory-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const submitBtn = document.getElementById('submit-btn');
+        const prodId = document.getElementById('product-id').value;
+
+        const name = document.getElementById('product-name').value;
+        const buyPrice = document.getElementById('buy-price').value;
+        const sellPrice = document.getElementById('sell-price').value;
+        const stockInfo = document.getElementById('stock-info').value;
+        const imageFile = document.getElementById('product-image').files[0];
+
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('buyPrice', buyPrice);
+        formData.append('sellPrice', sellPrice);
+        formData.append('stockInfo', stockInfo);
+        if (imageFile) {
+            formData.append('image', imageFile);
+        }
+
+        let url = API_URL;
+        let method = 'POST';
+
+        if (isEditing) {
+            url = `${API_URL}/${prodId}`;
+            method = 'PUT'; // Backend Update route configuration mapping
+        }
+
+        try {
+            const response = await fetch(url, {
+                method: method,
+                body: formData
+            });
+
+            if (response.ok) {
+                alert(isEditing ? 'Asset updated successfully!' : 'Asset successfully saved in database!');
+                resetForm();
+                await loadProducts(); 
+            } else {
+                alert('Server Error: ' + await response.text());
+            }
+        } catch (error) {
+            alert('Transmission failure with host engine.');
+        }
+    });
+
+    // Database load block + fixing undefined error mapping
+    async function loadProducts() {
+        try {
+            const response = await fetch(API_URL);
+            if (!response.ok) throw new Error("Sync error");
+            allProducts = await response.json();
+            renderProducts(allProducts);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    function renderProducts(productsToDisplay) {
+        const listContainer = document.getElementById('inventory-list');
+        listContainer.innerHTML = ''; 
+
+        if (productsToDisplay.length === 0) {
+            listContainer.innerHTML = '<p style="color:#888;">No items found.</p>';
+            return;
+        }
+
+        productsToDisplay.forEach(prod => {
+            const imageSrc = prod.image ? `data:image/jpeg;base64,${prod.image}` : 'https://via.placeholder.com/85?text=No+Image';
+            
+            // Fixed variable mappings from Java backend keys (handling snake_case fallbacks)
+            const name = prod.name || 'Unknown Item';
+            const stock = prod.stockInfo || prod.stock_info || 'N/A';
+            const bPrice = prod.buyPrice || prod.buy_price || '0';
+            const sPrice = prod.sellPrice || prod.sell_price || '0';
+            const id = prod.id;
+
+            listContainer.innerHTML += `
+                <div class="card">
+                    <div class="card-main">
+                        <img src="${imageSrc}" alt="${name}">
+                        <div class="card-details">
+                            <h4>${name}</h4>
+                            <p><b>Stock:</b> ${stock}</p>
+                            <p><b>Buy Price:</b> ₹${bPrice} | <b>Sell Price:</b> ₹${sPrice}</p>
+                        </div>
+                    </div>
+                    <div class="action-btns">
+                        <button class="btn-edit" onclick="editProduct(${id})">Edit</button>
+                        <button class="btn-delete" onclick="deleteProduct(${id})">Delete</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // Delete Operations controller targeting row identity 
+    async function deleteProduct(id) {
+        if (!confirm('Are you sure you want to purge this record from database?')) return;
+        try {
+            const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+            if (response.ok) {
+                alert('Record wiped from host database.');
+                await loadProducts();
+            } else {
+                alert('Failed to execute row delete controller.');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Populate data back to inputs for editing 
+    function editProduct(id) {
+        const prod = allProducts.find(p => p.id === id);
+        if (!prod) return;
+
+        document.getElementById('product-id').value = prod.id;
+        document.getElementById('product-name').value = prod.name;
+        document.getElementById('buy-price').value = prod.buyPrice || prod.buy_price;
+        document.getElementById('sell-price').value = prod.sellPrice || prod.sell_price;
+        document.getElementById('stock-info').value = prod.stockInfo || prod.stock_info;
+
+        document.getElementById('form-title').innerText = '📝 Edit Inventory Asset';
+        document.getElementById('submit-btn').innerText = 'Save Changes';
+        document.getElementById('submit-btn').style.background = '#ffcc00';
+        isEditing = true;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetForm() {
+        document.getElementById('inventory-form').reset();
+        document.getElementById('product-id').value = '';
+        document.getElementById('form-title').innerText = '📦 Stock Inward (New Asset)';
+        document.getElementById('submit-btn').innerText = 'Commit Asset to Inventory';
+        document.getElementById('submit-btn').style.background = '#00ffcc';
+        isEditing = false;
+    }
+
+    // Search trigger setup 
+    document.getElementById('search-bar').addEventListener('input', function(e) {
+        const searchText = e.target.value.toLowerCase();
+        const filtered = allProducts.filter(prod => prod.name.toLowerCase().includes(searchText));
+        renderProducts(filtered);
+    });
+
+    window.onload = loadProducts;
+</script>
+</body>
+</html>
