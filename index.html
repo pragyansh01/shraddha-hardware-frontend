@@ -1,12 +1,12 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shraddha Hardware Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- html2canvas Library to capture real photos of the bill -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --bg: #060a06;
@@ -16,6 +16,8 @@
             --text: #e2e8f0;
             --muted: #8c9ba5;
             --danger: #ef4444;
+            --warning: #eab308;
+            --info: #3b82f6;
             --glass-border: rgba(34, 197, 94, 0.15);
         }
         body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; overflow-x: hidden; }
@@ -45,7 +47,7 @@
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; font-size: 13px; color: var(--accent); margin-bottom: 6px; font-weight: 600; letter-spacing: 0.5px; }
         
-        .action-btn { width: 100%; padding: 14px; border: none; background: linear-gradient(135deg, #22c55e, #16a34a); color: white; font-weight: bold; font-size: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px var(--accent-glow); }
+        .action-btn { width: 100%; padding: 14px; border: none; background: linear-gradient(135deg, #22c55e, #16a34a); color: white; font-weight: bold; font-size: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px var(--accent-glow); margin-bottom: 10px; }
         .action-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px var(--accent-glow); }
 
         .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
@@ -58,6 +60,14 @@
         .control-btns button { padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-left: 5px; border: none; }
         .edit-btn { background: #eab308; color: black; }
         .delete-btn { background: #ef4444; color: white; }
+
+        /* Custom Ledger & Folder Styles */
+        .history-card { background: var(--card); border: 1px solid var(--glass-border); padding: 20px; border-radius: 12px; margin-bottom: 15px; }
+        .status-pill { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; }
+        .status-paid { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+        .status-unpaid { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .status-withheld { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        .status-cancelled { background: rgba(234, 179, 8, 0.2); color: #eab308; }
 
         .bill-book-container { background: #e6f4ea; color: #0b2512; padding: 40px; border: 2px solid #155b27; font-family: 'Courier New', monospace; position: relative; border-radius: 6px; }
         .bill-watermark { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%) rotate(-25deg); font-size: 45px; color: rgba(21, 91, 39, 0.06); font-weight: 900; pointer-events: none; white-space: nowrap; text-align: center; letter-spacing: 2px; }
@@ -94,7 +104,8 @@
             <button id="nav-contact" onclick="switchPage('contact')">📞 Reach Desk</button>
             <button id="nav-private" onclick="switchPage('private')">🔐 Personal View</button>
             <button id="nav-admin" onclick="switchPage('admin')">📦 Warehouse Log</button>
-            <button id="nav-billing" onclick="switchPage('billing')">🧾 Invoice Desk</button>
+            <button id="nav-billing" onclick="switchPage('billing')">🧾 Billing Counter</button>
+            <button id="nav-history" onclick="switchPage('history')">📂 Khata Ledger</button>
             <button id="logout-btn" style="display:none; color:var(--danger); border: 1px solid var(--danger);" onclick="triggerLogout()">Logout</button>
         </div>
         <button class="lang-btn" onclick="toggleLanguage()">🌐 EN / HI</button>
@@ -102,7 +113,6 @@
 
     <div class="container">
         
-        <!-- DASHBOARD SUMMARY MATRIX ROW -->
         <div class="dash-row" id="global-dash-summary" style="display:none;">
             <div class="dash-card">
                 <h4 id="lbl-dash-total">Total Stock Items</h4>
@@ -132,7 +142,7 @@
             <div class="catalog-grid" id="private-catalog"></div>
         </section>
 
-        <!-- SECURE WAREHOUSE MANAGEMENT LOGS -->
+        <!-- SECURE WAREHOUSE LOGS -->
         <section id="page-admin" class="page-section">
             <h2 id="admin-title" style="color:var(--accent); margin-top:0;">📦 Warehouse Logs</h2>
             <div class="card" style="background:var(--card); border:1px solid var(--glass-border); padding:25px; border-radius:12px; margin-bottom:25px;">
@@ -169,9 +179,9 @@
             <div id="log-list"></div>
         </section>
 
-        <!-- SECURE INVOICE BILL ENGINE -->
+        <!-- SECURE BILLING ENGINE -->
         <section id="page-billing" class="page-section">
-            <h2 style="color:var(--accent); margin-top:0;" id="lbl-invoice-title">🧾 Invoice Desk</h2>
+            <h2 style="color:var(--accent); margin-top:0;" id="lbl-invoice-title">🧾 Billing Counter</h2>
             <div style="background:var(--card); padding:25px; border-radius:12px; margin-bottom:25px; display:grid; grid-template-columns:1fr 1fr; gap:25px;">
                 <div>
                     <div class="input-group">
@@ -202,11 +212,24 @@
                             <input type="number" id="item-qty" value="1" step="0.01">
                         </div>
                         <div class="input-group" style="width: 50%;">
-                            <label id="lbl-discount">Discount (₹)</label>
+                            <label id="lbl-discount">Discount Per Piece (₹)</label>
                             <input type="number" id="item-discount" value="0">
                         </div>
                     </div>
                     <button class="action-btn" style="height:48px; margin-top: 6px;" onclick="addItemToCart()" id="btn-add-item">Add Item To Cart</button>
+                </div>
+            </div>
+
+            <!-- Live Settlement Control Box -->
+            <div style="background:var(--card); padding:25px; border-radius:12px; margin-bottom:25px;">
+                <div class="input-group">
+                    <label style="color:var(--warning);" id="lbl-status-select">Select Invoice Deal Status (बिल की स्थिति चुनें)</label>
+                    <select id="bill-status-selector">
+                        <option value="Paid">Paid (पक्का भुगतान)</option>
+                        <option value="Unpaid">Unpaid / Bakaya (उधार खाता)</option>
+                        <option value="Withheld">Withheld (रोका हुआ)</option>
+                        <option value="Cancelled">Cancelled (रद्द करें)</option>
+                    </select>
                 </div>
             </div>
 
@@ -239,7 +262,7 @@
                             <th>Particulars</th>
                             <th>Qty</th>
                             <th>Rate (MRP)</th>
-                            <th>Discount</th>
+                            <th>Disc/Pc</th>
                             <th>Net Amount</th>
                             <th class="no-print">Action</th>
                         </tr>
@@ -248,31 +271,52 @@
                 </table>
                 <div class="total-section">
                     <p style="font-size:16px; margin: 5px 0; color:#113a1a;">Grand Total Payable: ₹<span id="bill-total">0.00</span></p>
-                    <p style="font-size:10px; font-style:italic; margin-top:5px; color:#444;">*Note: All prices are fully inclusive of baseline taxes (GST already merged in MRP).</p>
+                    <p style="font-size:12px; margin: 5px 0; color:#851414; font-weight:bold;">Deal Type Status: <span id="lbl-bill-status-view">Paid</span></p>
                 </div>
                 <p style="margin-top:40px; font-size:11px; text-align:center; font-weight:bold; border-top:1px dashed #155b27; padding-top:15px; color:#155b27;">Thank You for Shopping. System Generated Invoice Token.</p>
             </div>
             
             <div style="margin-top:25px; display:flex; gap:15px;">
-                <button class="action-btn" onclick="downloadInvoicePDF()" id="btn-print-pdf">Print & Download PDF Invoice</button>
-                <button class="action-btn" style="background:linear-gradient(135deg, #075e54, #128c7e);" onclick="shareInvoiceOnWhatsApp()" id="btn-share-wa">Share Invoice on WhatsApp</button>
-                <button class="action-btn" style="background:linear-gradient(135deg, #15803d, #166534);" onclick="exportBillToExcel()" id="btn-export-excel">Export Data to Excel</button>
+                <button class="action-btn" onclick="saveAndCaptureInvoice()" id="btn-print-pdf">Save & Download Bill Photo</button>
+                <button class="action-btn" style="background:linear-gradient(135deg, #075e54, #128c7e);" onclick="shareInvoiceOnWhatsApp()" id="btn-share-wa">Share Invoice Text Link</button>
             </div>
+        </section>
+
+        <!-- SECURE HISTORY & KHATA LEDGER DESK -->
+        <section id="page-history" class="page-section">
+            <h2 style="color:var(--accent); margin-top:0;">📂 Khata Ledger & Bill History Search</h2>
+            
+            <div style="background:var(--card); padding:20px; border-radius:12px; margin-bottom:25px;">
+                <h4>🔍 Universal Search Engine</h4>
+                <input type="text" id="ledger-search-input"  placeholder="Search by Bill Number, Name, Date or Location Address..." oninput="searchLedgerRegistry()">
+            </div>
+
+            <!-- Payment Collection Box for Random Payments -->
+            <div style="background:var(--card); padding:20px; border-radius:12px; margin-bottom:25px; border: 1px solid var(--warning);">
+                <h4 style="color:var(--warning); margin-top:0;">💵 Random Payment Deposit (बीच में पैसा जमा करना)</h4>
+                <div style="display:flex; gap:15px;">
+                    <input type="text" id="pay-cname" placeholder="Exact Customer Name">
+                    <input type="text" id="pay-caddr" placeholder="Customer Address">
+                    <input type="number" id="pay-amount" placeholder="Amount Paid (₹)">
+                    <button class="action-btn" style="width:250px; background:var(--warning); color:black; margin-bottom:0;" onclick="submitRandomPayment()">Deposit Money</button>
+                </div>
+            </div>
+
+            <div id="ledger-history-container"></div>
         </section>
 
         <!-- STORE PROFILE CONTACT DESK -->
         <section id="page-contact" class="page-section">
             <h2 id="contact-title" style="color:var(--accent); margin-top:0;">🏢 Store Profile</h2>
             <div style="background:var(--card); padding:35px; border-radius:14px; border:1px solid var(--glass-border); line-height:1.6;">
-                <h3 style="color:var(--accent); margin-top:0; font-size:24px;">Shraddha Hardware</h3>
-                <p style="font-size:15px;">📍 <b>Official Location:</b> Mahuli, Ratanpur, Jaunpur</p>
-                <p style="font-size:15px;">📞 <b>Hotline Matrix Support:</b> +91 87561 48281</p>
-                <p style="font-size:15px;">✉️ <b>Email Pipeline:</b> Abhisheshkumarsingh1@gmail.com</p>
+                <h3>Shraddha Hardware</h3>
+                <p>📍 <b>Location:</b> Mahuli, Ratanpur, Jaunpur</p>
+                <p>📞 <b>Hotline:</b> +91 87561 48281</p>
+                <p>✉️ <b>Email:</b> Abhisheshkumarsingh1@gmail.com</p>
                 <hr style="border:0; border-top:1px solid var(--glass-border); margin:20px 0;">
-                <h4 style="color:var(--accent); margin-bottom:8px;" id="lbl-mgmt-title">Management Details:</h4>
-                <p style="font-size:15px; margin:4px 0;">👑 <b>Store Owner:</b> Chandrabhan Singh</p>
-                <p style="font-size:15px; margin:4px 0;">📱 <b>Owner Contact Node:</b> +91 73798 84977</p>
-                <p id="lbl-store-desc" style="font-size:14px; color:var(--muted); margin-top:20px; font-style:italic;">Shraddha Hardware is the absolute standard for premium structural tools, durable building logistics, and industrial machinery assets across Jaunpur since inception. Built for high endurance operations.</p>
+                <h4 id="lbl-mgmt-title">Management Details:</h4>
+                <p>👑 <b>Owner:</b> Chandrabhan Singh</p>
+                <p>📱 <b>Contact Node:</b> +91 73798 84977</p>
             </div>
         </section>
 
@@ -289,56 +333,10 @@
     let currentLang = 'en';
     let targetPendingPage = '';
 
-    const langPack = {
-        en: { 
-            search: "🔍 Search items...", 
-            title: "Product Showcase",
-            desc: "Shraddha Hardware is the absolute standard for premium structural tools, durable building logistics, and industrial machinery assets across Jaunpur since inception. Built for high endurance operations.",
-            cname: "Customer Name", cphone: "Customer Phone Number", caddr: "Customer Address",
-            filter: "Search Item", select: "Select Item", qty: "Quantity",
-            discount: "Discount (₹)", btnadd: "Add Item To Cart",
-            privTitle: "🔐 Personal Showcase (Buying Prices)",
-            admTitle: "📦 Warehouse Logs",
-            actInv: "All Stocks List",
-            invTitle: "🧾 Invoice Desk",
-            btnPdf: "Print & Download PDF Invoice",
-            btnWa: "Share Invoice on WhatsApp",
-            btnExcel: "Export Data to Excel",
-            popTitle: "🔐 Enter System Password",
-            popDesc: "Restricted panel. Please enter your password to open.",
-            popUnlock: "Unlock", popCancel: "Cancel",
-            navHome: "🛒 Showcase", navContact: "📞 Reach Desk", navPrivate: "🔐 Personal View",
-            navAdmin: "📦 Warehouse Log", navBilling: "🧾 Invoice Desk",
-            formAdd: "Add New Item", formSave: "Save Item",
-            mgmtTitle: "Management Details:",
-            dTotal: "Total Stock Items", dValue: "Total Asset Worth (Buy)", dAlert: "Low Stock Items",
-            lowAlert: "Low Stock!"
-        },
-        hi: { 
-            search: "🔍 सामान खोजें...", 
-            title: "सामान की दुकान (शोकेस)",
-            desc: "श्रद्धा हार्डवेयर जौनपुर में उच्च गुणवत्ता वाले निर्माण उपकरण, टिकाऊ लॉजिस्टिक्स और औद्योगिक मशीनरी संपत्तियों के लिए एकमात्र विश्वसनीय संस्थान है। लंबे समय तक चलने वाले मजबूत भरोसे का प्रतीक।",
-            cname: "ग्राहक का नाम", cphone: "ग्राहक का मोबाइल नंबर", caddr: "ग्राहक का पता",
-            filter: "सामान खोजें", select: "सामान चुनें", qty: "मात्रा",
-            discount: "छूट (₹)", btnadd: "सामान बिल में जोड़ें",
-            privTitle: "🔐 पर्सनल शोकेस (खरीद मूल्य)",
-            admTitle: "📦 गोदाम स्टॉक मैनेजमेंट",
-            actInv: "कुल स्टॉक सूची",
-            invTitle: "🧾 बिलिंग काउंटर",
-            btnPdf: "बिल प्रिंट और PDF डाउनलोड करें",
-            btnWa: "व्हाट्सएप पर bill भेजें",
-            btnExcel: "एक्सेल (Excel) शीट डाउनलोड करें",
-            popTitle: "🔐 सिस्टम पासवर्ड डालें",
-            popDesc: "यह सुरक्षित क्षेत्र है। खोलने ke liye password bharein.",
-            popUnlock: "खोलें", popCancel: "रद्द करें",
-            navHome: "🛒 शोकेस", navContact: "📞 संपर्क", navPrivate: "🔐 पर्सनल व्यू",
-            navAdmin: "📦 गोदाम लॉग", navBilling: "🧾 बिलिंग काउंटर",
-            formAdd: "नया सामान जोड़ें", formSave: "सामान सुरक्षित करें",
-            mgmtTitle: "प्रबंधन विवरण:",
-            dTotal: "कुल आइटम संख्या", dValue: "कुल पूंजी निवेश (खरीद)", dAlert: "कम स्टॉक वाले सामान",
-            lowAlert: "स्टॉक कम है!"
-        }
-    };
+    // Local DB structures for Ledger Folder view
+    if(!localStorage.getItem('globalInvoicesRegistry')) localStorage.setItem('globalInvoicesRegistry', JSON.stringify([]));
+    if(!localStorage.getItem('customerLedgerFolders')) localStorage.setItem('customerLedgerFolders', JSON.stringify({}));
+    if(!localStorage.getItem('billIndexCount')) localStorage.setItem('billIndexCount', '1');
 
     function showToast(message) {
         const container = document.getElementById('toast-container');
@@ -354,9 +352,7 @@
     }
 
     function checkAuth(targetPage) {
-        if (localStorage.getItem('isSystemAuthorized') === 'true') {
-            return true;
-        }
+        if (localStorage.getItem('isSystemAuthorized') === 'true') return true;
         targetPendingPage = targetPage;
         document.getElementById('auth-overlay').style.display = 'flex';
         return false;
@@ -370,11 +366,7 @@
             document.getElementById('pass-input').value = '';
             document.getElementById('logout-btn').style.display = 'block';
             showToast("Success.");
-            calculateDashboardMetrics();
-            document.getElementById('global-dash-summary').style.display = 'grid';
-            if (targetPendingPage) {
-                switchPage(targetPendingPage);
-            }
+            if (targetPendingPage) switchPage(targetPendingPage);
         } else {
             alert("Wrong Password!");
         }
@@ -389,90 +381,26 @@
     function triggerLogout() {
         localStorage.setItem('isSystemAuthorized', 'false');
         document.getElementById('logout-btn').style.display = 'none';
-        document.getElementById('global-dash-summary').style.display = 'none';
         showToast("Logged Out.");
         switchPage('home');
     }
 
     function switchPage(pageId) {
-        if (pageId === 'private' || pageId === 'admin' || pageId === 'billing') {
+        if (pageId === 'private' || pageId === 'admin' || pageId === 'billing' || pageId === 'history') {
             if (!checkAuth(pageId)) return;
-            calculateDashboardMetrics();
-            document.getElementById('global-dash-summary').style.display = 'grid';
-        } else {
-            document.getElementById('global-dash-summary').style.display = 'none';
         }
         document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-links button').forEach(el => el.classList.remove('active'));
         document.getElementById(`page-${pageId}`).classList.add('active');
         document.getElementById(`nav-${pageId}`).classList.add('active');
-    }
-
-    function calculateDashboardMetrics() {
-        let totalItems = allProducts.length;
-        let totalWorth = 0;
-        let lowStockCount = 0;
-
-        allProducts.forEach(p => {
-            let qty = parseFloat(p.stockInfo || 0);
-            let buy = parseFloat(p.buyPrice || 0);
-            totalWorth += (qty * buy);
-            if(qty <= 5) lowStockCount++;
-        });
-
-        document.getElementById('dash-val-total').innerText = totalItems;
-        document.getElementById('dash-val-worth').innerText = "₹" + totalWorth.toFixed(2);
-        document.getElementById('dash-val-low').innerText = lowStockCount;
+        
+        if(pageId === 'history') renderLedgerRegistry();
     }
 
     function toggleLanguage() {
         currentLang = currentLang === 'en' ? 'hi' : 'en';
-        
-        document.getElementById('nav-home').innerText = langPack[currentLang].navHome;
-        document.getElementById('nav-contact').innerText = langPack[currentLang].navContact;
-        document.getElementById('nav-private').innerText = langPack[currentLang].navPrivate;
-        document.getElementById('nav-admin').innerText = langPack[currentLang].navAdmin;
-        document.getElementById('nav-billing').innerText = langPack[currentLang].navBilling;
-
-        document.getElementById('search-bar').placeholder = langPack[currentLang].search;
-        document.getElementById('lbl-showcase-title').innerText = langPack[currentLang].title;
-        document.getElementById('lbl-store-desc').innerText = langPack[currentLang].desc;
-        document.getElementById('lbl-private-title').innerText = langPack[currentLang].privTitle;
-        document.getElementById('admin-title').innerText = langPack[currentLang].admTitle;
-        document.getElementById('lbl-active-inv').innerText = langPack[currentLang].actInv;
-        document.getElementById('lbl-invoice-title').innerText = langPack[currentLang].invTitle;
-        document.getElementById('lbl-mgmt-title').innerText = langPack[currentLang].mgmtTitle;
-        
-        document.getElementById('lbl-dash-total').innerText = langPack[currentLang].dTotal;
-        document.getElementById('lbl-dash-value').innerText = langPack[currentLang].dValue;
-        document.getElementById('lbl-dash-alert').innerText = langPack[currentLang].dAlert;
-
-        if(document.getElementById('edit-prod-id').value === "") {
-            document.getElementById('form-action-title').innerText = langPack[currentLang].formAdd;
-        }
-        document.getElementById('submit-form-btn').innerText = langPack[currentLang].formSave;
-
-        document.getElementById('lbl-cname').innerText = langPack[currentLang].cname;
-        document.getElementById('lbl-cphone').innerText = langPack[currentLang].cphone;
-        document.getElementById('lbl-caddr').innerText = langPack[currentLang].caddr;
-        document.getElementById('lbl-filter').innerText = langPack[currentLang].filter;
-        document.getElementById('lbl-select').innerText = langPack[currentLang].select;
-        document.getElementById('lbl-qty').innerText = langPack[currentLang].qty;
-        document.getElementById('lbl-discount').innerText = langPack[currentLang].discount;
-        document.getElementById('btn-add-item').innerText = langPack[currentLang].btnadd;
-        document.getElementById('btn-print-pdf').innerText = langPack[currentLang].btnPdf;
-        document.getElementById('btn-share-wa').innerText = langPack[currentLang].btnWa;
-        document.getElementById('btn-export-excel').innerText = langPack[currentLang].btnExcel;
-
-        document.getElementById('lbl-popup-title').innerText = langPack[currentLang].popTitle;
-        document.getElementById('lbl-popup-desc').innerText = langPack[currentLang].popDesc;
-        document.getElementById('btn-popup-login').innerText = langPack[currentLang].popUnlock;
-        document.getElementById('btn-popup-cancel').innerText = langPack[currentLang].popCancel;
-
+        showToast(currentLang === 'en' ? "Interface: English" : "भाषा: हिंदी");
         renderCustomerCatalog(allProducts);
-        renderPrivateCatalog(allProducts);
-        renderAdminLogs(allProducts);
-        showToast(currentLang === 'en' ? "Language: English" : "भाषा: हिंदी");
     }
 
     async function loadSystemData() {
@@ -483,195 +411,82 @@
             renderPrivateCatalog(allProducts);
             renderAdminLogs(allProducts);
             populateBillingDropdown(allProducts);
-            
-            if(!localStorage.getItem('billIndexCount')) {
-                localStorage.setItem('billIndexCount', '1');
-            }
             document.getElementById('lbl-bill-count').innerText = localStorage.getItem('billIndexCount');
-            
             if(localStorage.getItem('isSystemAuthorized') === 'true') {
                 document.getElementById('logout-btn').style.display = 'block';
-                document.getElementById('global-dash-summary').style.display = 'grid';
-                calculateDashboardMetrics();
             }
-        } catch(e) { console.error("Database connection failed:", e); }
+        } catch(e) { console.error("Fetch failed", e); }
     }
 
     function renderCustomerCatalog(items) {
         const grid = document.getElementById('customer-catalog');
         const isHI = currentLang === 'hi';
-        grid.innerHTML = items.map(p => {
-            const titleName = isHI && p.nameHi ? p.nameHi : p.name;
-            const description = isHI ? (p.descriptionHi || p.description || 'विवरण नहीं है।') : (p.description || 'No description.');
-            const unitStr = p.unit || 'Pcs';
-            const isLow = parseFloat(p.stockInfo || 0) <= 5;
-            return `
-                <div class="prod-card">
-                    ${isLow ? `<span class="alert-badge">${langPack[currentLang].lowAlert}</span>` : ''}
-                    <img src="${p.image ? 'data:image/jpeg;base64,'+p.image : 'https://via.placeholder.com/150'}">
-                    <h3 style="margin:12px 0 6px 0; color:var(--accent); font-size:16px;">${titleName}</h3>
-                    <p style="margin:4px 0; font-size:15px; font-weight:bold;">₹${p.sellPrice} / ${unitStr}</p>
-                    <p style="margin:4px 0; font-size:12px; color:var(--muted); line-height:1.4;">${description}</p>
-                </div>
-            `;
-        }).join('');
+        grid.innerHTML = items.map(p => `
+            <div class="prod-card">
+                <img src="${p.image ? 'data:image/jpeg;base64,'+p.image : 'https://via.placeholder.com/150'}">
+                <h3 style="margin:12px 0 6px 0; color:var(--accent);">${isHI && p.nameHi ? p.nameHi : p.name}</h3>
+                <p style="font-weight:bold;">₹${p.sellPrice} / ${p.unit || 'Pcs'}</p>
+            </div>
+        `).join('');
     }
 
     function renderPrivateCatalog(items) {
         const grid = document.getElementById('private-catalog');
-        const isHI = currentLang === 'hi';
-        grid.innerHTML = items.map(p => {
-            const titleName = isHI && p.nameHi ? p.nameHi : p.name;
-            const unitStr = p.unit || 'Pcs';
-            const buy = parseFloat(p.buyPrice || 0);
-            const sell = parseFloat(p.sellPrice || 0);
-            const profit = sell - buy;
-            const margin = buy > 0 ? ((profit / buy) * 100).toFixed(1) : 0;
-            return `
-                <div class="prod-card" style="border-color:#e11d48;">
-                    <img src="${p.image ? 'data:image/jpeg;base64,'+p.image : 'https://via.placeholder.com/150'}">
-                    <h3 style="margin:12px 0 6px 0; color:#ef4444; font-size:16px;">${titleName}</h3>
-                    <p style="margin:2px 0; font-size:13px; color:#f43f5e;">💰 Buy Cost: <b>₹${buy}</b></p>
-                    <p style="margin:2px 0; font-size:13px; color:var(--accent);">🏷️ MRP Sell: <b>₹${sell} / ${unitStr}</b></p>
-                    <p style="margin:2px 0; font-size:12px; color:#22c55e; font-weight:600;">📈 Profit: ₹${profit.toFixed(2)} (${margin}%)</p>
-                    <p style="margin:4px 0; font-size:12px; color:var(--muted);">Warehouse Qty: ${p.stockInfo} ${unitStr}</p>
-                </div>
-            `;
-        }).join('');
+        grid.innerHTML = items.map(p => `
+            <div class="prod-card" style="border-color:#e11d48;">
+                <h3 style="color:#ef4444;">${p.name}</h3>
+                <p>💰 Buy Cost: ₹${p.buyPrice}</p>
+                <p>🏷️ MRP Sell: ₹${p.sellPrice} / ${p.unit || 'Pcs'}</p>
+                <p>Warehouse Qty: ${p.stockInfo}</p>
+            </div>
+        `).join('');
     }
 
     function renderAdminLogs(items) {
         const list = document.getElementById('log-list');
-        const isHI = currentLang === 'hi';
-        list.innerHTML = items.map(p => {
-            const displayName = isHI && p.nameHi ? p.nameHi : p.name;
-            const unitStr = p.unit || 'Pcs';
-            const isLow = parseFloat(p.stockInfo || 0) <= 5;
-            return `
-                <div class="log-item" style="${isLow ? 'border-left: 4px solid var(--danger);' : ''}">
-                    <div>
-                        <b>${displayName}</b> ${isLow ? `<span style="color:var(--danger); font-size:11px; font-weight:bold;">[${langPack[currentLang].lowAlert}]</span>` : ''}
-                        <br><span style="color:var(--muted); font-size:12px;">(Buy: ₹${p.buyPrice} | Sell: ₹${p.sellPrice} | Qty: ${p.stockInfo} ${unitStr})</span>
-                    </div>
-                    <div class="control-btns">
-                        <button class="edit-btn" onclick="startEditMode(${JSON.stringify(p).replace(/"/g, '&quot;')})">Edit</button>
-                        <button class="delete-btn" onclick="deleteAssetItem(${p.id})">Delete</button>
-                    </div>
+        list.innerHTML = items.map(p => `
+            <div class="log-item">
+                <div><b>${p.name}</b> <span style="color:var(--muted);">(Sell: ₹${p.sellPrice} / ${p.unit || 'Pcs'})</span></div>
+                <div class="control-btns">
+                    <button class="edit-btn" onclick="startEditMode(${JSON.stringify(p).replace(/"/g, '&quot;')})">Edit</button>
+                    <button class="delete-btn" onclick="deleteAssetItem(${p.id})">Delete</button>
                 </div>
-            `;
-        }).join('');
+            </div>
+        `).join('');
     }
 
     function filterAdminLogs() {
         const txt = document.getElementById('search-logs').value.toLowerCase();
-        const filtered = allProducts.filter(p => p.name.toLowerCase().includes(txt) || (p.nameHi && p.nameHi.toLowerCase().includes(txt)));
-        renderAdminLogs(filtered);
-    }
-
-    function startEditMode(prod) {
-        document.getElementById('edit-prod-id').value = prod.id;
-        document.getElementById('prod-name').value = prod.name;
-        document.getElementById('prod-name-hi').value = prod.nameHi || '';
-        document.getElementById('prod-desc').value = prod.description || '';
-        document.getElementById('prod-desc-hi').value = prod.descriptionHi || '';
-        document.getElementById('prod-unit').value = prod.unit || 'Pcs';
-        document.getElementById('prod-buy').value = prod.buyPrice;
-        document.getElementById('prod-sell').value = prod.sellPrice;
-        document.getElementById('prod-qty').value = prod.stockInfo;
-        
-        document.getElementById('form-action-title').innerText = currentLang === 'hi' ? "✏️ सामान बदलें (Edit)" : "✏️ Update Item";
-        document.getElementById('submit-form-btn').innerText = currentLang === 'hi' ? "सुरक्षित करें" : "Save Update";
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    document.getElementById('stock-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const editId = document.getElementById('edit-prod-id').value;
-        const fd = new FormData();
-        fd.append('name', document.getElementById('prod-name').value);
-        fd.append('nameHi', document.getElementById('prod-name-hi').value);
-        fd.append('description', document.getElementById('prod-desc').value);
-        fd.append('descriptionHi', document.getElementById('prod-desc-hi').value);
-        fd.append('unit', document.getElementById('prod-unit').value);
-        fd.append('buyPrice', document.getElementById('prod-buy').value);
-        fd.append('sellPrice', document.getElementById('prod-sell').value);
-        fd.append('stockInfo', document.getElementById('prod-qty').value);
-        
-        const img = document.getElementById('prod-img').files[0];
-        if(img) fd.append('image', img);
-
-        let URL = API_URL;
-        let method = 'POST';
-        
-        if (editId) {
-            URL = `${API_URL}/${editId}`;
-            method = 'PUT';
-        }
-
-        const res = await fetch(URL, {
-            method: method,
-            headers: { 'X-Admin-Secret': SECURE_KEY },
-            body: fd
-        });
-
-        if(res.ok) { 
-            showToast("Saved.");
-            document.getElementById('stock-form').reset();
-            document.getElementById('edit-prod-id').value = '';
-            document.getElementById('form-action-title').innerText = currentLang === 'hi' ? "नया सामान जोड़ें" : "Add New Item";
-            document.getElementById('submit-form-btn').innerText = currentLang === 'hi' ? "सामान सुरक्षित करें" : "Save Item";
-            document.getElementById('search-logs').value = '';
-            loadSystemData(); 
-        } else { showToast("Failed."); }
-    });
-
-    async function deleteAssetItem(id) {
-        if(!confirm("Delete this item?")) return;
-        const res = await fetch(`${API_URL}/${id}`, {
-            method: 'DELETE',
-            headers: { 'X-Admin-Secret': SECURE_KEY }
-        });
-        if(res.ok) {
-            showToast("Deleted.");
-            document.getElementById('search-logs').value = '';
-            loadSystemData();
-        }
+        renderAdminLogs(allProducts.filter(p => p.name.toLowerCase().includes(txt)));
     }
 
     function populateBillingDropdown(items) {
         const select = document.getElementById('item-selector');
-        const isHI = currentLang === 'hi';
-        select.innerHTML = items.map(p => {
-            const nameStr = isHI && p.nameHi ? p.nameHi : p.name;
-            const unitStr = p.unit || 'Pcs';
-            return `<option value="${p.id}">${nameStr} (MRP: ₹${p.sellPrice} / ${unitStr})</option>`;
-        }).join('');
+        select.innerHTML = items.map(p => `<option value="${p.id}">${p.name} (₹${p.sellPrice})</option>`).join('');
     }
 
     function filterSelectorItems() {
         const txt = document.getElementById('search-dropdown-item').value.toLowerCase();
-        const filtered = allProducts.filter(p => p.name.toLowerCase().includes(txt) || (p.nameHi && p.nameHi.toLowerCase().includes(txt)));
-        populateBillingDropdown(filtered);
+        populateBillingDropdown(allProducts.filter(p => p.name.toLowerCase().includes(txt)));
     }
 
     function addItemToCart() {
         const id = document.getElementById('item-selector').value;
         const qty = parseFloat(document.getElementById('item-qty').value) || 1;
-        const disc = parseFloat(document.getElementById('item-discount').value) || 0;
+        const discPerPc = parseFloat(document.getElementById('item-discount').value) || 0;
         if(!id) return;
         
         const prod = allProducts.find(p => p.id == id);
         if(!prod) return;
 
-        cart.push({ id: prod.id, name: prod.name, nameHi: prod.nameHi || '', qty: qty, rate: prod.sellPrice, discount: disc, unit: prod.unit || 'Pcs' });
+        cart.push({ id: prod.id, name: prod.name, nameHi: prod.nameHi || '', qty: qty, rate: prod.sellPrice, discountPerPc: discPerPc, unit: prod.unit || 'Pcs' });
         updateBillUI();
-        showToast("Added to Cart.");
+        showToast("Added.");
     }
 
     function removeCartItem(index) {
         cart.splice(index, 1);
         updateBillUI();
-        showToast("Item Removed.");
     }
 
     function updateBillUI() {
@@ -679,53 +494,188 @@
         document.getElementById('lbl-phone').innerText = document.getElementById('c-phone').value || ".....................";
         document.getElementById('lbl-addr').innerText = document.getElementById('c-addr').value || ".....................";
         document.getElementById('lbl-date').innerText = new Date().toLocaleString('en-IN');
-        document.getElementById('lbl-bill-count').innerText = localStorage.getItem('billIndexCount') || '1';
+        
+        const status = document.getElementById('bill-status-selector').value;
+        document.getElementById('lbl-bill-status-view').innerText = status;
 
         const tbody = document.getElementById('bill-items-body');
         let finalPayable = 0;
-        const isHI = currentLang === 'hi';
         
         tbody.innerHTML = cart.map((item, index) => {
-            const netAmount = (item.qty * item.rate) - item.discount;
+            // Per piece discount calculation logic
+            const netAmount = (item.qty * (item.rate - item.discountPerPc));
             finalPayable += netAmount;
-            const printName = isHI && item.nameHi ? item.nameHi : item.name;
             return `<tr>
                 <td>${index+1}</td>
-                <td>${printName}</td>
+                <td>${item.name}</td>
                 <td>${item.qty} ${item.unit}</td>
                 <td>₹${item.rate}</td>
-                <td>₹${item.discount.toFixed(2)}</td>
+                <td>₹${item.discountPerPc}</td>
                 <td>₹${netAmount.toFixed(2)}</td>
-                <td class="no-print"><button onclick="removeCartItem(${index})" style="background:var(--danger); border:none; color:white; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;">X</button></td>
+                <td class="no-print"><button onclick="removeCartItem(${index})" style="background:var(--danger); border:none; color:white; padding:4px 8px; border-radius:4px; cursor:pointer;">X</button></td>
             </tr>`;
         }).join('');
 
         document.getElementById('bill-total').innerText = finalPayable.toFixed(2);
     }
 
-    function downloadInvoicePDF() {
-        if(cart.length === 0) { alert("Cart is empty!"); return; }
-        
-        const style = document.createElement('style');
-        style.innerHTML = `@media print { .no-print { display: none !important; } }`;
-        document.head.appendChild(style);
+    document.getElementById('bill-status-selector').addEventListener('change', updateBillUI);
 
-        const target = document.getElementById('printable-bill');
-        const currentCount = parseInt(localStorage.getItem('billIndexCount') || 1);
+    function saveAndCaptureInvoice() {
+        if(cart.length === 0) { alert("Cart is empty!"); return; }
+        const cname = document.getElementById('c-name').value.trim();
+        const caddr = document.getElementById('c-addr').value.trim() || "Local";
+        const status = document.getElementById('bill-status-selector').value;
+        const total = parseFloat(document.getElementById('bill-total').innerText);
         
-        const opt = { 
-            margin: 0.4, 
-            filename: `Bill-No-${currentCount}.pdf`, 
-            image: { type: 'jpeg', quality: 1.0 }, 
-            html2canvas: { scale: 3, ignoreElements: (el) => el.classList.contains('no-print') }, 
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
+        if(!cname) { alert("Customer Name is required!"); return; }
+
+        let currentCount = parseInt(localStorage.getItem('billIndexCount') || 1);
+        
+        // Registry payload
+        const invoiceObj = {
+            billNo: status === 'Cancelled' ? 'CANCELLED' : currentCount,
+            date: new Date().toLocaleDateString('en-IN'),
+            time: new Date().toLocaleTimeString('en-IN'),
+            customer: cname,
+            address: caddr,
+            status: status,
+            totalAmount: total,
+            items: [...cart]
         };
+
+        // 1. Save to global list
+        let registry = JSON.parse(localStorage.getItem('globalInvoicesRegistry'));
+        registry.push(invoiceObj);
+        localStorage.setItem('globalInvoicesRegistry', JSON.stringify(registry));
+
+        // 2. Folder assignment
+        let folders = JSON.parse(localStorage.getItem('customerLedgerFolders'));
+        const folderKey = `${cname.toLowerCase()}_${caddr.toLowerCase()}`;
+        if(!folders[folderKey]) {
+            folders[folderKey] = { name: cname, address: caddr, totalPurchased: 0, totalPaid: 0, balance: 0, entries: [] };
+        }
         
-        html2pdf().set(opt).from(target).save();
-        showToast("Downloaded.");
+        folders[folderKey].entries.push(invoiceObj);
+        if(status !== 'Cancelled') {
+            folders[folderKey].totalPurchased += total;
+            if(status === 'Paid') folders[folderKey].totalPaid += total;
+            folders[folderKey].balance = folders[folderKey].totalPaid - folders[folderKey].totalPurchased;
+        }
+        localStorage.setItem('customerLedgerFolders', JSON.stringify(folders));
+
+        // 3. Capture Real Picture (html2canvas) instead of PDF
+        const target = document.getElementById('printable-bill');
+        html2canvas(target, { scale: 2, useCORS: true }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `Bill-No-${invoiceObj.billNo}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            showToast("Bill Photo Saved Successfully!");
+        });
+
+        if(status !== 'Cancelled') {
+            localStorage.setItem('billIndexCount', (currentCount + 1).toString());
+        }
         
-        localStorage.setItem('billIndexCount', (currentCount + 1).toString());
         triggerStockDeductionEngine();
+    }
+
+    function submitRandomPayment() {
+        const name = document.getElementById('pay-cname').value.trim();
+        const addr = document.getElementById('pay-caddr').value.trim() || "Local";
+        const amt = parseFloat(document.getElementById('pay-amount').value) || 0;
+
+        if(!name || amt <= 0) { alert("Fill all collection nodes properly!"); return; }
+
+        let folders = JSON.parse(localStorage.getItem('customerLedgerFolders'));
+        const folderKey = `${name.toLowerCase()}_${addr.toLowerCase()}`;
+
+        if(!folders[folderKey]) {
+            folders[folderKey] = { name: name, address: addr, totalPurchased: 0, totalPaid: 0, balance: 0, entries: [] };
+        }
+
+        const paymentEntry = {
+            billNo: 'CASH-DEP',
+            date: new Date().toLocaleDateString('en-IN'),
+            time: new Date().toLocaleTimeString('en-IN'),
+            customer: name,
+            address: addr,
+            status: 'Paid',
+            totalAmount: amt,
+            items: [{ name: 'Random Cash Payment Deposit Received', qty: 1, unit: 'Node', rate: amt, discountPerPc: 0 }]
+        };
+
+        folders[folderKey].entries.push(paymentEntry);
+        folders[folderKey].totalPaid += amt;
+        folders[folderKey].balance = folders[folderKey].totalPaid - folders[folderKey].totalPurchased;
+        
+        let registry = JSON.parse(localStorage.getItem('globalInvoicesRegistry'));
+        registry.push(paymentEntry);
+        
+        localStorage.setItem('customerLedgerFolders', JSON.stringify(folders));
+        localStorage.setItem('globalInvoicesRegistry', JSON.stringify(registry));
+
+        document.getElementById('pay-cname').value = '';
+        document.getElementById('pay-caddr').value = '';
+        document.getElementById('pay-amount').value = '';
+        
+        showToast("Payment Processed.");
+        renderLedgerRegistry();
+    }
+
+    function renderLedgerRegistry() {
+        const container = document.getElementById('ledger-history-container');
+        let folders = JSON.parse(localStorage.getItem('customerLedgerFolders'));
+        
+        if(Object.keys(folders).length === 0) {
+            container.innerHTML = `<p style="color:var(--muted);">No folders active in registry ledger.</p>`;
+            return;
+        }
+
+        let html = '';
+        for(let key in folders) {
+            let f = folders[key];
+            let balStatus = f.balance < 0 ? `<span style="color:var(--danger);">Bakaya (Udhaar): ₹${Math.abs(f.balance).toFixed(2)} (Minus)</span>` : `<span style="color:var(--accent);">Clear/Advance: ₹${f.balance.toFixed(2)}</span>`;
+            
+            html += `<div class="history-card" data-searchable="${f.name.toLowerCase()} ${f.address.toLowerCase()}">
+                <h3 style="color:var(--accent); margin-top:0; margin-bottom:5px;">📂 Account Folder: ${f.name}</h3>
+                <p style="margin:2px 0; font-size:13px; color:var(--muted);">📍 Address: ${f.address}</p>
+                <div style="display:flex; gap:25px; margin:12px 0; padding:10px; background:#0e170e; border-radius:6px; font-size:13px;">
+                    <div>Total Purchased: <b>₹${f.totalPurchased.toFixed(2)}</b></div>
+                    <div>Total Paid: <b>₹${f.totalPaid.toFixed(2)}</b></div>
+                    <div>Status: <b>${balStatus}</b></div>
+                </div>
+                <h4 style="margin-bottom:6px; font-size:13px;">Linked Slips History:</h4>
+                <div style="max-height:200px; overflow-y:auto; font-size:12px;">
+                    <table style="width:100%; border-collapse:collapse; text-align:left;">
+                        <thead>
+                            <tr style="color:var(--accent);">
+                                <th>Slip No.</th><th>Date</th><th>Amount</th><th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${f.entries.map(e => `
+                                <tr style="border-bottom:1px solid #112211;">
+                                    <td>${e.billNo}</td><td>${e.date}</td><td>₹${e.totalAmount}</td>
+                                    <td><span class="status-pill status-${e.status.toLowerCase()}">${e.status}</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>`;
+        }
+        container.innerHTML = html;
+    }
+
+    function searchLedgerRegistry() {
+        const txt = document.getElementById('ledger-search-input').value.toLowerCase();
+        document.querySelectorAll('.history-card').forEach(card => {
+            const searchable = card.getAttribute('data-searchable');
+            if(searchable.includes(txt)) card.style.display = 'block';
+            else card.style.display = 'none';
+        });
     }
 
     function shareInvoiceOnWhatsApp() {
@@ -736,47 +686,18 @@
         const custName = document.getElementById('c-name').value || "Customer";
         const billNo = localStorage.getItem('billIndexCount') || '1';
         let total = document.getElementById('bill-total').innerText;
-        const isHI = currentLang === 'hi';
+        const status = document.getElementById('bill-status-selector').value;
         
-        let messageText = `*SHRADDHA HARDWARE INVOICE*%0A------------------------------%0A*Bill No:* ${billNo}%0A*Customer:* ${custName}%0A------------------------------%0A`;
-        
+        let messageText = `*SHRADDHA HARDWARE INVOICE*%0A------------------------------%0A*Bill No:* ${billNo}%0A*Customer:* ${custName}%0A*Status:* ${status}%0A------------------------------%0A`;
         cart.forEach((item, index) => {
-            let net = (item.qty * item.rate) - item.discount;
-            const finalPrintName = isHI && item.nameHi ? item.nameHi : item.name;
-            messageText += `${index+1}. ${finalPrintName} x ${item.qty} ${item.unit} = ₹${net}%0A`;
+            let net = item.qty * (item.rate - item.discountPerPc);
+            messageText += `${index+1}. ${item.name} x ${item.qty} = ₹${net.toFixed(2)}%0A`;
         });
-        
-        messageText += `------------------------------%0A*Total Payable:* ₹${total}%0A%0A_Thank you for visiting Shraddha Hardware!_`;
+        messageText += `------------------------------%0A*Total Payable:* ₹${total}%0A%0A_Photo Invoice Generated! Please ask shopkeeper for the bill picture._`;
         
         let cleanPhone = phone.replace(/\D/g, '');
         if(cleanPhone.length === 10) cleanPhone = "91" + cleanPhone;
-        
         window.open(`https://api.whatsapp.com/send?phone=${cleanPhone}&text=${messageText}`, '_blank');
-    }
-
-    function exportBillToExcel() {
-        if(cart.length === 0) { alert("Cart is empty!"); return; }
-        const custName = document.getElementById('c-name').value || "Walk-in Customer";
-        const custAddr = document.getElementById('c-addr').value || "Not Provided";
-        const isHI = currentLang === 'hi';
-        
-        const data = cart.map(i => {
-            const sheetName = isHI && i.nameHi ? i.nameHi : i.name;
-            return { 
-                "Customer Name": custName, 
-                "Customer Place/Address": custAddr,
-                "Particulars (Item)": sheetName, 
-                "Quantity": `${i.qty} ${i.unit}`, 
-                "Rate (MRP)": i.rate, 
-                "Discount Allowed": i.discount, 
-                "Net Total Amount": ((i.qty * i.rate) - i.discount) 
-            };
-        });
-        
-        const ws = XLSX.utils.json_to_sheet(data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Sales Ledger");
-        XLSX.writeFile(wb, `Report-Log-${Date.now()}.xlsx`);
     }
 
     async function triggerStockDeductionEngine() {
