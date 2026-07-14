@@ -20,14 +20,12 @@
         }
         body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; overflow-x: hidden; }
         
-        /* Glassmorphic Navigation */
         .navbar { display: flex; justify-content: space-between; align-items: center; background: rgba(10, 18, 10, 0.8); backdrop-filter: blur(14px); padding: 15px 40px; border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 100; }
         .nav-links { display: flex; gap: 10px; }
         .nav-links button { background: none; border: none; color: var(--muted); font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.3s; padding: 8px 16px; border-radius: 20px; }
         .nav-links button.active, .nav-links button:hover { color: #fff; background: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
         .lang-btn { background: linear-gradient(135deg, #22c55e, #15803d); color: white; border: none; padding: 6px 16px; font-weight: bold; border-radius: 20px; cursor: pointer; }
 
-        /* Notification Toast */
         #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
         .toast { background: #142314; color: #fff; padding: 14px 24px; border-radius: 8px; border-left: 4px solid var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-weight: 600; font-size: 14px; margin-bottom: 10px; transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .toast.show { transform: translateX(0); }
@@ -37,24 +35,31 @@
         .page-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Forms & Inputs */
+        /* Summary Cards Dashboard Style */
+        .dash-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
+        .dash-card { background: var(--card); border: 1px solid var(--glass-border); padding: 15px 20px; border-radius: 12px; text-align: center; }
+        .dash-card h4 { margin: 0; font-size: 13px; color: var(--muted); }
+        .dash-card p { margin: 5px 0 0 0; font-size: 22px; font-weight: bold; color: var(--accent); }
+
         input, select { width: 100%; padding: 14px; margin-bottom: 18px; border: 1px solid var(--glass-border); background: #0b110b; color: white; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
         input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 10px var(--accent-glow); }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 13px; color: var(--accent); margin-bottom: 6px; font-weight: 600; letter-spacing: 0.5px; }
+        
         .action-btn { width: 100%; padding: 14px; border: none; background: linear-gradient(135deg, #22c55e, #16a34a); color: white; font-weight: bold; font-size: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px var(--accent-glow); }
         .action-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px var(--accent-glow); }
 
-        /* Catalog Grid Layout */
         .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
-        .prod-card { background: var(--card); border: 1px solid var(--glass-border); border-radius: 14px; padding: 20px; transition: 0.3s; text-align: center; backdrop-filter: blur(4px); }
+        .prod-card { background: var(--card); border: 1px solid var(--glass-border); border-radius: 14px; padding: 20px; transition: 0.3s; text-align: center; backdrop-filter: blur(4px); position: relative; }
         .prod-card img { width: 100%; height: 170px; object-fit: cover; border-radius: 10px; background: #070c07; }
+        
+        .alert-badge { position: absolute; top: 10px; right: 10px; background: var(--danger); color: white; font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 10px; }
 
-        /* Warehouse Edit Logs */
         .log-item { background: var(--card); border: 1px solid var(--glass-border); padding: 15px 20px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .control-btns button { padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-left: 5px; border: none; }
         .edit-btn { background: #eab308; color: black; }
         .delete-btn { background: #ef4444; color: white; }
 
-        /* Real-time Custom Greenish Bill Design */
         .bill-book-container { background: #e6f4ea; color: #0b2512; padding: 40px; border: 2px solid #155b27; font-family: 'Courier New', monospace; position: relative; border-radius: 6px; }
         .bill-watermark { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%) rotate(-25deg); font-size: 45px; color: rgba(21, 91, 39, 0.06); font-weight: 900; pointer-events: none; white-space: nowrap; text-align: center; letter-spacing: 2px; }
         .bill-header { text-align: center; border-bottom: 2px dashed #155b27; padding-bottom: 12px; }
@@ -64,7 +69,6 @@
         .bill-table th { background: rgba(34, 197, 94, 0.12); }
         .total-section { text-align: right; margin-top: 20px; font-weight: bold; font-size: 14px; border-top: 1px solid #155b27; padding-top: 10px; }
 
-        /* Smart Popups UI */
         #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(8px); }
         .auth-box { background: #121a12; padding: 35px; border-radius: 16px; border: 2px solid var(--accent); width: 340px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
         
@@ -75,14 +79,13 @@
 
     <div id="toast-container"></div>
 
-    <!-- Premium Login UI Box -->
     <div id="auth-overlay">
         <div class="auth-box">
-            <h3 style="color:var(--accent); margin-top: 0; font-size: 20px;">🔐 System Protected Portal</h3>
-            <p style="color:var(--muted); font-size: 13px; margin-bottom: 20px;">Verification required to open restricted ledger desks.</p>
-            <input type="password" id="pass-input" placeholder="Enter Control Key..." style="text-align: center;">
-            <button class="action-btn" style="margin-bottom: 10px;" onclick="verifyGateLogin()">Unlock Desks</button>
-            <button class="action-btn" style="background:transparent; border: 1px solid #333; color:var(--text);" onclick="closeGateOverlay()">Cancel Access</button>
+            <h3 style="color:var(--accent); margin-top: 0; font-size: 20px;" id="lbl-popup-title">🔐 Enter System Password</h3>
+            <p style="color:var(--muted); font-size: 13px; margin-bottom: 20px;" id="lbl-popup-desc">Restricted panel. Please enter your password to open.</p>
+            <input type="password" id="pass-input" placeholder="Password..." style="text-align: center;">
+            <button class="action-btn" style="margin-bottom: 10px;" onclick="verifyGateLogin()" id="btn-popup-login">Unlock</button>
+            <button class="action-btn" style="background:transparent; border: 1px solid #333; color:var(--text);" onclick="closeGateOverlay()" id="btn-popup-cancel">Cancel</button>
         </div>
     </div>
 
@@ -100,58 +103,111 @@
 
     <div class="container">
         
+        <!-- DASHBOARD SUMMARY MATRIX ROW (Visible inside private pages) -->
+        <div class="dash-row id="global-dash-summary" style="display:none;">
+            <div class="dash-card">
+                <h4 id="lbl-dash-total">Total Stock Items</h4>
+                <p id="dash-val-total">0</p>
+            </div>
+            <div class="dash-card">
+                <h4 id="lbl-dash-value">Total Asset Worth (Buy)</h4>
+                <p id="dash-val-worth">₹0.00</p>
+            </div>
+            <div class="dash-card" style="border-color: var(--danger);">
+                <h4 style="color:var(--danger);" id="lbl-dash-alert">Low Stock Items</h4>
+                <p id="dash-val-low" style="color:var(--danger);">0</p>
+            </div>
+        </div>
+
         <!-- PUBLIC SHOWCASE -->
         <section id="page-home" class="page-section active">
             <h2 id="lbl-showcase-title" style="color:var(--accent); margin-top:0;">Product Showcase</h2>
-            <input type="text" id="search-bar" placeholder="🔍 Search warehouse assets...">
+            <input type="text" id="search-bar" placeholder="🔍 Search items...">
             <div class="catalog-grid" id="customer-catalog"></div>
         </section>
 
         <!-- SECURE PERSONAL VIEW -->
         <section id="page-private" class="page-section">
-            <h2 style="color:var(--accent); margin-top:0;">🔐 Internal Operational Ledger</h2>
-            <input type="text" id="search-private" placeholder="🔍 Search assets with net production margin limits...">
+            <h2 style="color:var(--accent); margin-top:0;" id="lbl-private-title">🔐 Personal Showcase (Buying Prices)</h2>
+            <input type="text" id="search-private" placeholder="🔍 Search items...">
             <div class="catalog-grid" id="private-catalog"></div>
         </section>
 
         <!-- SECURE WAREHOUSE MANAGEMENT LOGS -->
         <section id="page-admin" class="page-section">
-            <h2 id="admin-title" style="color:var(--accent); margin-top:0;">📦 Warehouse Stock Control</h2>
+            <h2 id="admin-title" style="color:var(--accent); margin-top:0;">📦 Warehouse Logs</h2>
             <div class="card" style="background:var(--card); border:1px solid var(--glass-border); padding:25px; border-radius:12px; margin-bottom:25px;">
-                <h3 id="form-action-title" style="margin-top:0; color:var(--accent);">Add New Asset</h3>
+                <h3 id="form-action-title" style="margin-top:0; color:var(--accent);">Add New Item</h3>
                 <form id="stock-form">
                     <input type="hidden" id="edit-prod-id">
-                    <input type="text" id="prod-name" placeholder="Product Name" required>
-                    <input type="text" id="prod-desc" placeholder="Product Description (English)">
-                    <input type="text" id="prod-desc-hi" placeholder="Product Description (Hindi)">
+                    <input type="text" id="prod-name" placeholder="Item Name (English)" required>
+                    <input type="text" id="prod-name-hi" placeholder="सामान का नाम (Hindi)">
+                    <input type="text" id="prod-desc" placeholder="Item Description (English)">
+                    <input type="text" id="prod-desc-hi" placeholder="सामान का विवरण (Hindi)">
+                    
+                    <div class="input-group">
+                        <label style="display:block; font-size:13px; color:var(--accent); margin-bottom:6px;" id="lbl-form-unit">Measurement Unit (इकाई)</label>
+                        <select id="prod-unit">
+                            <option value="Pcs">Pieces (Pcs)</option>
+                            <option value="Litre">Litre (Ltr)</option>
+                            <option value="Kg">Kilogram (Kg)</option>
+                            <option value="Meter">Meter (Mtr)</option>
+                            <option value="Packet">Packet (Pkt)</option>
+                            <option value="Box">Box</option>
+                        </select>
+                    </div>
+
                     <input type="number" id="prod-buy" placeholder="Buying Price (₹)" step="0.01" required>
-                    <input type="number" id="prod-sell" placeholder="Selling Price (₹)" step="0.01" required>
-                    <input type="number" id="prod-qty" placeholder="Stock Count" required>
+                    <input type="number" id="prod-sell" placeholder="Selling Price / MRP (₹)" step="0.01" required>
+                    <input type="number" id="prod-qty" placeholder="Stock Quantity" required>
                     <input type="file" id="prod-img" accept="image/*">
-                    <button type="submit" id="submit-form-btn" class="action-btn">Commit Stock Entry</button>
+                    <button type="submit" id="submit-form-btn" class="action-btn">Save Item</button>
                 </form>
             </div>
-            <h3 style="color:var(--accent);">Active Inventory Matrix</h3>
+            
+            <h3 style="color:var(--accent);" id="lbl-active-inv">All Stocks List</h3>
+            <input type="text" id="search-logs" placeholder="🔍 Search stocks to Edit or Delete..." oninput="filterAdminLogs()">
             <div id="log-list"></div>
         </section>
 
         <!-- SECURE INVOICE BILL ENGINE -->
         <section id="page-billing" class="page-section">
-            <h2 style="color:var(--accent); margin-top:0;">🧾 Live Invoice Desk</h2>
+            <h2 style="color:var(--accent); margin-top:0;" id="lbl-invoice-title">🧾 Invoice Desk</h2>
             <div style="background:var(--card); padding:25px; border-radius:12px; margin-bottom:25px; display:grid; grid-template-columns:1fr 1fr; gap:25px;">
                 <div>
-                    <input type="text" id="c-name" placeholder="Customer Name" oninput="updateBillUI()">
-                    <input type="text" id="c-phone" placeholder="Customer Phone Number" oninput="updateBillUI()">
-                    <input type="text" id="c-addr" placeholder="Customer Address Address" oninput="updateBillUI()">
+                    <div class="input-group">
+                        <label id="lbl-cname">Customer Name</label>
+                        <input type="text" id="c-name" placeholder="Enter Name" oninput="updateBillUI()">
+                    </div>
+                    <div class="input-group">
+                        <label id="lbl-cphone">Customer Phone Number</label>
+                        <input type="text" id="c-phone" placeholder="Enter Mobile Number" oninput="updateBillUI()">
+                    </div>
+                    <div class="input-group">
+                        <label id="lbl-caddr">Customer Address</label>
+                        <input type="text" id="c-addr" placeholder="Enter Address" oninput="updateBillUI()">
+                    </div>
                 </div>
                 <div>
-                    <input type="text" id="search-dropdown-item" placeholder="🔍 Quick Filter Selector..." oninput="filterSelectorItems()">
-                    <select id="item-selector"></select>
-                    <div style="display:flex; gap:10px;">
-                        <input type="number" id="item-qty" placeholder="Qty" value="1" style="width:90px;">
-                        <input type="number" id="item-discount" placeholder="Discount (₹)" value="0" style="width:120px;">
-                        <button class="action-btn" style="width:auto; padding:0 25px; height:48px;" onclick="addItemToCart()">Add Item</button>
+                    <div class="input-group">
+                        <label id="lbl-filter">Search Item</label>
+                        <input type="text" id="search-dropdown-item" placeholder="🔍 Type item name..." oninput="filterSelectorItems()">
                     </div>
+                    <div class="input-group">
+                        <label id="lbl-select">Select Item</label>
+                        <select id="item-selector"></select>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <div class="input-group" style="width: 50%;">
+                            <label id="lbl-qty">Quantity</label>
+                            <input type="number" id="item-qty" value="1" step="0.01">
+                        </div>
+                        <div class="input-group" style="width: 50%;">
+                            <label id="lbl-discount">Discount (₹)</label>
+                            <input type="number" id="item-discount" value="0">
+                        </div>
+                    </div>
+                    <button class="action-btn" style="height:48px; margin-top: 6px;" onclick="addItemToCart()" id="btn-add-item">Add Item To Cart</button>
                 </div>
             </div>
 
@@ -186,6 +242,7 @@
                             <th>Rate (MRP)</th>
                             <th>Discount</th>
                             <th>Net Amount</th>
+                            <th class="no-print">Action</th>
                         </tr>
                     </thead>
                     <tbody id="bill-items-body"></tbody>
@@ -198,22 +255,23 @@
             </div>
             
             <div style="margin-top:25px; display:flex; gap:15px;">
-                <button class="action-btn" onclick="downloadInvoicePDF()">Print & Download PDF Invoice</button>
-                <button class="action-btn" style="background:linear-gradient(135deg, #15803d, #166534);" onclick="exportBillToExcel()">Export Report Data to Excel</button>
+                <button class="action-btn" onclick="downloadInvoicePDF()" id="btn-print-pdf">Print & Download PDF Invoice</button>
+                <button class="action-btn" style="background:linear-gradient(135deg, #075e54, #128c7e);" onclick="shareInvoiceOnWhatsApp()" id="btn-share-wa">Share Invoice on WhatsApp</button>
+                <button class="action-btn" style="background:linear-gradient(135deg, #15803d, #166534);" onclick="exportBillToExcel()" id="btn-export-excel">Export Data to Excel</button>
             </div>
         </section>
 
         <!-- STORE PROFILE CONTACT DESK -->
         <section id="page-contact" class="page-section">
-            <h2 id="contact-title" style="color:var(--accent); margin-top:0;">🏢 Store Identification & Profile</h2>
+            <h2 id="contact-title" style="color:var(--accent); margin-top:0;">🏢 Store Profile</h2>
             <div style="background:var(--card); padding:35px; border-radius:14px; border:1px solid var(--glass-border); line-height:1.6;">
                 <h3 style="color:var(--accent); margin-top:0; font-size:24px;">Shraddha Hardware</h3>
                 <p style="font-size:15px;">📍 <b>Official Location:</b> Mahuli, Ratanpur, Jaunpur</p>
                 <p style="font-size:15px;">📞 <b>Hotline Matrix Support:</b> +91 87561 48281</p>
                 <p style="font-size:15px;">✉️ <b>Email Pipeline:</b> Abhisheshkumarsingh1@gmail.com</p>
                 <hr style="border:0; border-top:1px solid var(--glass-border); margin:20px 0;">
-                <h4 style="color:var(--accent); margin-bottom:8px;">Management Command Control:</h4>
-                <p style="font-size:15px; margin:4px 0;">👑 <b>System Owner:</b> Chandrabhan Singh</p>
+                <h4 style="color:var(--accent); margin-bottom:8px;" id="lbl-mgmt-title">Management Details:</h4>
+                <p style="font-size:15px; margin:4px 0;">👑 <b>Store Owner:</b> Chandrabhan Singh</p>
                 <p style="font-size:15px; margin:4px 0;">📱 <b>Owner Contact Node:</b> +91 73798 84977</p>
                 <p id="lbl-store-desc" style="font-size:14px; color:var(--muted); margin-top:20px; font-style:italic;">Shraddha Hardware is the absolute standard for premium structural tools, durable building logistics, and industrial machinery assets across Jaunpur since inception. Built for high endurance operations.</p>
             </div>
@@ -225,7 +283,7 @@
     </div>
 
 <script>
-    const API_URL = 'https://shraddha-hardware-backend-1.onrender.com/api/products';
+    const API_URL = 'https://shraddha-hardware-backend-1.onrende const API_URL = 'https://shraddha-hardware-backend-1.onrender.com/api/products';
     const SECURE_KEY = 'Shraddha832024';
     let allProducts = [];
     let cart = [];
@@ -234,14 +292,52 @@
 
     const langPack = {
         en: { 
-            search: "🔍 Search warehouse assets...", 
+            search: "🔍 Search items...", 
             title: "Product Showcase",
-            desc: "Shraddha Hardware is the absolute standard for premium structural tools, durable building logistics, and industrial machinery assets across Jaunpur since inception. Built for high endurance operations."
+            desc: "Shraddha Hardware is the absolute standard for premium structural tools, durable building logistics, and industrial machinery assets across Jaunpur since inception. Built for high endurance operations.",
+            cname: "Customer Name", cphone: "Customer Phone Number", caddr: "Customer Address",
+            filter: "Search Item", select: "Select Item", qty: "Quantity",
+            discount: "Discount (₹)", btnadd: "Add Item To Cart",
+            privTitle: "🔐 Personal Showcase (Buying Prices)",
+            admTitle: "📦 Warehouse Logs",
+            actInv: "All Stocks List",
+            invTitle: "🧾 Invoice Desk",
+            btnPdf: "Print & Download PDF Invoice",
+            btnWa: "Share Invoice on WhatsApp",
+            btnExcel: "Export Data to Excel",
+            popTitle: "🔐 Enter System Password",
+            popDesc: "Restricted panel. Please enter your password to open.",
+            popUnlock: "Unlock", popCancel: "Cancel",
+            navHome: "🛒 Showcase", navContact: "📞 Reach Desk", navPrivate: "🔐 Personal View",
+            navAdmin: "📦 Warehouse Log", navBilling: "🧾 Invoice Desk",
+            formAdd: "Add New Item", formSave: "Save Item",
+            mgmtTitle: "Management Details:",
+            dTotal: "Total Stock Items", dValue: "Total Asset Worth (Buy)", dAlert: "Low Stock Items",
+            lowAlert: "Low Stock!"
         },
         hi: { 
             search: "🔍 सामान खोजें...", 
-            title: "गोदाम एसेट्स शोकेस",
-            desc: "श्रद्धा हार्डवेयर जौनपुर में उच्च गुणवत्ता वाले निर्माण उपकरण, टिकाऊ लॉजिस्टिक्स और औद्योगिक मशीनरी संपत्तियों के लिए एकमात्र विश्वसनीय संस्थान है। लंबे समय तक चलने वाले मजबूत भरोसे का प्रतीक।"
+            title: "सामान की दुकान (शोकेस)",
+            desc: "श्रद्धा हार्डवेयर जौनपुर में उच्च गुणवत्ता वाले निर्माण उपकरण, टिकाऊ लॉजिस्टिक्स और औद्योगिक मशीनरी संपत्तियों के लिए एकमात्र विश्वसनीय संस्थान है। लंबे समय तक चलने वाले मजबूत भरोसे का प्रतीक।",
+            cname: "ग्राहक का नाम", cphone: "ग्राहक का मोबाइल नंबर", caddr: "ग्राहक का पता",
+            filter: "सामान खोजें", select: "सामान चुनें", qty: "मात्रा",
+            discount: "छूट (₹)", btnadd: "सामान बिल में जोड़ें",
+            privTitle: "🔐 पर्सनल शोकेस (खरीद मूल्य)",
+            admTitle: "📦 गोदाम स्टॉक मैनेजमेंट",
+            actInv: "कुल स्टॉक सूची",
+            invTitle: "🧾 बिलिंग काउंटर",
+            btnPdf: "बिल प्रिंट और PDF डाउनलोड करें",
+            btnWa: "व्हाट्सएप पर bill भेजें",
+            btnExcel: "एक्सेल (Excel) शीट डाउनलोड करें",
+            popTitle: "🔐 सिस्टम पासवर्ड डालें",
+            popDesc: "यह सुरक्षित क्षेत्र है। खोलने ke liye password bharein.",
+            popUnlock: "खोलें", popCancel: "रद्द करें",
+            navHome: "🛒 शोकेस", navContact: "📞 संपर्क", navPrivate: "🔐 पर्सनल व्यू",
+            navAdmin: "📦 गोदाम लॉग", navBilling: "🧾 बिलिंग काउंटर",
+            formAdd: "नया सामान जोड़ें", formSave: "सामान सुरक्षित करें",
+            mgmtTitle: "प्रबंधन विवरण:",
+            dTotal: "कुल आइटम संख्या", dValue: "कुल पूंजी निवेश (खरीद)", dAlert: "कम स्टॉक वाले सामान",
+            lowAlert: "स्टॉक कम है!"
         }
     };
 
@@ -274,12 +370,14 @@
             document.getElementById('auth-overlay').style.display = 'none';
             document.getElementById('pass-input').value = '';
             document.getElementById('logout-btn').style.display = 'block';
-            showToast("System Verified successfully.");
+            showToast("Success.");
+            calculateDashboardMetrics();
+            document.getElementById('global-dash-summary').style.display = 'grid';
             if (targetPendingPage) {
                 switchPage(targetPendingPage);
             }
         } else {
-            alert("Security Breach: Invalid Credentials.");
+            alert("Wrong Password!");
         }
     }
 
@@ -292,13 +390,18 @@
     function triggerLogout() {
         localStorage.setItem('isSystemAuthorized', 'false');
         document.getElementById('logout-btn').style.display = 'none';
-        showToast("Logged out from device session.");
+        document.getElementById('global-dash-summary').style.display = 'none';
+        showToast("Logged Out.");
         switchPage('home');
     }
 
     function switchPage(pageId) {
         if (pageId === 'private' || pageId === 'admin' || pageId === 'billing') {
             if (!checkAuth(pageId)) return;
+            calculateDashboardMetrics();
+            document.getElementById('global-dash-summary').style.display = 'grid';
+        } else {
+            document.getElementById('global-dash-summary').style.display = 'none';
         }
         document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-links button').forEach(el => el.classList.remove('active'));
@@ -306,13 +409,71 @@
         document.getElementById(`nav-${pageId}`).classList.add('active');
     }
 
+    function calculateDashboardMetrics() {
+        let totalItems = allProducts.length;
+        let totalWorth = 0;
+        let lowStockCount = 0;
+
+        allProducts.forEach(p => {
+            let qty = parseFloat(p.stockInfo || 0);
+            let buy = parseFloat(p.buyPrice || 0);
+            totalWorth += (qty * buy);
+            if(qty <= 5) lowStockCount++;
+        });
+
+        document.getElementById('dash-val-total').innerText = totalItems;
+        document.getElementById('dash-val-worth').innerText = "₹" + totalWorth.toFixed(2);
+        document.getElementById('dash-val-low').innerText = lowStockCount;
+    }
+
     function toggleLanguage() {
         currentLang = currentLang === 'en' ? 'hi' : 'en';
+        
+        document.getElementById('nav-home').innerText = langPack[currentLang].navHome;
+        document.getElementById('nav-contact').innerText = langPack[currentLang].navContact;
+        document.getElementById('nav-private').innerText = langPack[currentLang].navPrivate;
+        document.getElementById('nav-admin').innerText = langPack[currentLang].navAdmin;
+        document.getElementById('nav-billing').innerText = langPack[currentLang].navBilling;
+
         document.getElementById('search-bar').placeholder = langPack[currentLang].search;
         document.getElementById('lbl-showcase-title').innerText = langPack[currentLang].title;
         document.getElementById('lbl-store-desc').innerText = langPack[currentLang].desc;
+        document.getElementById('lbl-private-title').innerText = langPack[currentLang].privTitle;
+        document.getElementById('admin-title').innerText = langPack[currentLang].admTitle;
+        document.getElementById('lbl-active-inv').innerText = langPack[currentLang].actInv;
+        document.getElementById('lbl-invoice-title').innerText = langPack[currentLang].invTitle;
+        document.getElementById('lbl-mgmt-title').innerText = langPack[currentLang].mgmtTitle;
+        
+        document.getElementById('lbl-dash-total').innerText = langPack[currentLang].dTotal;
+        document.getElementById('lbl-dash-value').innerText = langPack[currentLang].dValue;
+        document.getElementById('lbl-dash-alert').innerText = langPack[currentLang].dAlert;
+
+        if(document.getElementById('edit-prod-id').value === "") {
+            document.getElementById('form-action-title').innerText = langPack[currentLang].formAdd;
+        }
+        document.getElementById('submit-form-btn').innerText = langPack[currentLang].formSave;
+
+        document.getElementById('lbl-cname').innerText = langPack[currentLang].cname;
+        document.getElementById('lbl-cphone').innerText = langPack[currentLang].cphone;
+        document.getElementById('lbl-caddr').innerText = langPack[currentLang].caddr;
+        document.getElementById('lbl-filter').innerText = langPack[currentLang].filter;
+        document.getElementById('lbl-select').innerText = langPack[currentLang].select;
+        document.getElementById('lbl-qty').innerText = langPack[currentLang].qty;
+        document.getElementById('lbl-discount').innerText = langPack[currentLang].discount;
+        document.getElementById('btn-add-item').innerText = langPack[currentLang].btnadd;
+        document.getElementById('btn-print-pdf').innerText = langPack[currentLang].btnPdf;
+        document.getElementById('btn-share-wa').innerText = langPack[currentLang].btnWa;
+        document.getElementById('btn-export-excel').innerText = langPack[currentLang].btnExcel;
+
+        document.getElementById('lbl-popup-title').innerText = langPack[currentLang].popTitle;
+        document.getElementById('lbl-popup-desc').innerText = langPack[currentLang].popDesc;
+        document.getElementById('btn-popup-login').innerText = langPack[currentLang].popUnlock;
+        document.getElementById('btn-popup-cancel').innerText = langPack[currentLang].popCancel;
+
         renderCustomerCatalog(allProducts);
-        showToast(currentLang === 'en' ? "Matrix: English Interface" : "सिस्टम: हिंदी इंटरफ़ेस");
+        renderPrivateCatalog(allProducts);
+        renderAdminLogs(allProducts);
+        showToast(currentLang === 'en' ? "Language: English" : "भाषा: हिंदी");
     }
 
     async function loadSystemData() {
@@ -331,19 +492,26 @@
             
             if(localStorage.getItem('isSystemAuthorized') === 'true') {
                 document.getElementById('logout-btn').style.display = 'block';
+                document.getElementById('global-dash-summary').style.display = 'grid';
+                calculateDashboardMetrics();
             }
         } catch(e) { console.error("Database connection failed:", e); }
     }
 
     function renderCustomerCatalog(items) {
         const grid = document.getElementById('customer-catalog');
+        const isHI = currentLang === 'hi';
         grid.innerHTML = items.map(p => {
-            const description = currentLang === 'en' ? (p.description || 'No asset description cataloged.') : (p.descriptionHi || p.description || 'कोई विवरण उपलब्ध नहीं है।');
+            const titleName = isHI && p.nameHi ? p.nameHi : p.name;
+            const description = isHI ? (p.descriptionHi || p.description || 'विवरण नहीं है।') : (p.description || 'No description.');
+            const unitStr = p.unit || 'Pcs';
+            const isLow = parseFloat(p.stockInfo || 0) <= 5;
             return `
                 <div class="prod-card">
+                    ${isLow ? `<span class="alert-badge">${langPack[currentLang].lowAlert}</span>` : ''}
                     <img src="${p.image ? 'data:image/jpeg;base64,'+p.image : 'https://via.placeholder.com/150'}">
-                    <h3 style="margin:12px 0 6px 0; color:var(--accent); font-size:16px;">${p.name}</h3>
-                    <p style="margin:4px 0; font-size:15px; font-weight:bold;">₹${p.sellPrice}</p>
+                    <h3 style="margin:12px 0 6px 0; color:var(--accent); font-size:16px;">${titleName}</h3>
+                    <p style="margin:4px 0; font-size:15px; font-weight:bold;">₹${p.sellPrice} / ${unitStr}</p>
                     <p style="margin:4px 0; font-size:12px; color:var(--muted); line-height:1.4;">${description}</p>
                 </div>
             `;
@@ -352,43 +520,68 @@
 
     function renderPrivateCatalog(items) {
         const grid = document.getElementById('private-catalog');
-        grid.innerHTML = items.map(p => `
-            <div class="prod-card" style="border-color:#e11d48;">
-                <img src="${p.image ? 'data:image/jpeg;base64,'+p.image : 'https://via.placeholder.com/150'}">
-                <h3 style="margin:12px 0 6px 0; color:#ef4444; font-size:16px;">${p.name}</h3>
-                <p style="margin:2px 0; font-size:13px; color:#f43f5e;">💰 Buy Cost: <b>₹${p.buyPrice}</b></p>
-                <p style="margin:2px 0; font-size:13px; color:var(--accent);">🏷️ MRP Sell: <b>₹${p.sellPrice}</b></p>
-                <p style="margin:4px 0; font-size:12px; color:var(--muted);">Warehouse Quantity: ${p.stockInfo} units</p>
-            </div>
-        `).join('');
+        const isHI = currentLang === 'hi';
+        grid.innerHTML = items.map(p => {
+            const titleName = isHI && p.nameHi ? p.nameHi : p.name;
+            const unitStr = p.unit || 'Pcs';
+            const buy = parseFloat(p.buyPrice || 0);
+            const sell = parseFloat(p.sellPrice || 0);
+            const profit = sell - buy;
+            const margin = buy > 0 ? ((profit / buy) * 100).toFixed(1) : 0;
+            return `
+                <div class="prod-card" style="border-color:#e11d48;">
+                    <img src="${p.image ? 'data:image/jpeg;base64,'+p.image : 'https://via.placeholder.com/150'}">
+                    <h3 style="margin:12px 0 6px 0; color:#ef4444; font-size:16px;">${titleName}</h3>
+                    <p style="margin:2px 0; font-size:13px; color:#f43f5e;">💰 Buy Cost: <b>₹${buy}</b></p>
+                    <p style="margin:2px 0; font-size:13px; color:var(--accent);">🏷️ MRP Sell: <b>₹${sell} / ${unitStr}</b></p>
+                    <p style="margin:2px 0; font-size:12px; color:#22c55e; font-weight:600;">📈 Profit: ₹${profit.toFixed(2)} (${margin}%)</p>
+                    <p style="margin:4px 0; font-size:12px; color:var(--muted);">Warehouse Qty: ${p.stockInfo} ${unitStr}</p>
+                </div>
+            `;
+        }).join('');
     }
 
     function renderAdminLogs(items) {
         const list = document.getElementById('log-list');
-        list.innerHTML = items.map(p => `
-            <div class="log-item">
-                <div>
-                    <b>${p.name}</b> <span style="color:var(--muted); font-size:12px;">(Buy: ₹${p.buyPrice} | Sell: ₹${p.sellPrice} | Qty: ${p.stockInfo})</span>
+        const isHI = currentLang === 'hi';
+        list.innerHTML = items.map(p => {
+            const displayName = isHI && p.nameHi ? p.nameHi : p.name;
+            const unitStr = p.unit || 'Pcs';
+            const isLow = parseFloat(p.stockInfo || 0) <= 5;
+            return `
+                <div class="log-item" style="${isLow ? 'border-left: 4px solid var(--danger);' : ''}">
+                    <div>
+                        <b>${displayName}</b> ${isLow ? `<span style="color:var(--danger); font-size:11px; font-weight:bold;">[${langPack[currentLang].lowAlert}]</span>` : ''}
+                        <br><span style="color:var(--muted); font-size:12px;">(Buy: ₹${p.buyPrice} | Sell: ₹${p.sellPrice} | Qty: ${p.stockInfo} ${unitStr})</span>
+                    </div>
+                    <div class="control-btns">
+                        <button class="edit-btn" onclick="startEditMode(${JSON.stringify(p).replace(/"/g, '&quot;')})">Edit</button>
+                        <button class="delete-btn" onclick="deleteAssetItem(${p.id})">Delete</button>
+                    </div>
                 </div>
-                <div class="control-btns">
-                    <button class="edit-btn" onclick="startEditMode(${JSON.stringify(p).replace(/"/g, '&quot;')})">Edit</button>
-                    <button class="delete-btn" onclick="deleteAssetItem(${p.id})">Delete</button>
-                </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
+    }
+
+    function filterAdminLogs() {
+        const txt = document.getElementById('search-logs').value.toLowerCase();
+        const filtered = allProducts.filter(p => p.name.toLowerCase().includes(txt) || (p.nameHi && p.nameHi.toLowerCase().includes(txt)));
+        renderAdminLogs(filtered);
     }
 
     function startEditMode(prod) {
         document.getElementById('edit-prod-id').value = prod.id;
         document.getElementById('prod-name').value = prod.name;
+        document.getElementById('prod-name-hi').value = prod.nameHi || '';
         document.getElementById('prod-desc').value = prod.description || '';
         document.getElementById('prod-desc-hi').value = prod.descriptionHi || '';
+        document.getElementById('prod-unit').value = prod.unit || 'Pcs';
         document.getElementById('prod-buy').value = prod.buyPrice;
         document.getElementById('prod-sell').value = prod.sellPrice;
         document.getElementById('prod-qty').value = prod.stockInfo;
         
-        document.getElementById('form-action-title').innerText = "✏️ Update Existing Asset";
-        document.getElementById('submit-form-btn').innerText = "Save Asset Update";
+        document.getElementById('form-action-title').innerText = currentLang === 'hi' ? "✏️ सामान बदलें (Edit)" : "✏️ Update Item";
+        document.getElementById('submit-form-btn').innerText = currentLang === 'hi' ? "सुरक्षित करें" : "Save Update";
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -397,8 +590,10 @@
         const editId = document.getElementById('edit-prod-id').value;
         const fd = new FormData();
         fd.append('name', document.getElementById('prod-name').value);
+        fd.append('nameHi', document.getElementById('prod-name-hi').value);
         fd.append('description', document.getElementById('prod-desc').value);
         fd.append('descriptionHi', document.getElementById('prod-desc-hi').value);
+        fd.append('unit', document.getElementById('prod-unit').value);
         fd.append('buyPrice', document.getElementById('prod-buy').value);
         fd.append('sellPrice', document.getElementById('prod-sell').value);
         fd.append('stockInfo', document.getElementById('prod-qty').value);
@@ -421,50 +616,63 @@
         });
 
         if(res.ok) { 
-            showToast(editId ? "Asset entries updated." : "Asset saved to cloud matrix.");
+            showToast("Saved.");
             document.getElementById('stock-form').reset();
             document.getElementById('edit-prod-id').value = '';
-            document.getElementById('form-action-title').innerText = "Add New Asset";
-            document.getElementById('submit-form-btn').innerText = "Commit Stock Entry";
+            document.getElementById('form-action-title').innerText = currentLang === 'hi' ? "नया सामान जोड़ें" : "Add New Item";
+            document.getElementById('submit-form-btn').innerText = currentLang === 'hi' ? "सामान सुरक्षित करें" : "Save Item";
+            document.getElementById('search-logs').value = '';
             loadSystemData(); 
-        } else { showToast("Authentication failed."); }
+        } else { showToast("Failed."); }
     });
 
     async function deleteAssetItem(id) {
-        if(!confirm("Are you sure you want to delete this asset?")) return;
+        if(!confirm("Delete this item?")) return;
         const res = await fetch(`${API_URL}/${id}`, {
             method: 'DELETE',
             headers: { 'X-Admin-Secret': SECURE_KEY }
         });
         if(res.ok) {
-            showToast("Asset record destroyed.");
+            showToast("Deleted.");
+            document.getElementById('search-logs').value = '';
             loadSystemData();
         }
     }
 
     function populateBillingDropdown(items) {
         const select = document.getElementById('item-selector');
-        select.innerHTML = items.map(p => `<option value="${p.id}">${p.name} (MRP: ₹${p.sellPrice})</option>`).join('');
+        const isHI = currentLang === 'hi';
+        select.innerHTML = items.map(p => {
+            const nameStr = isHI && p.nameHi ? p.nameHi : p.name;
+            const unitStr = p.unit || 'Pcs';
+            return `<option value="${p.id}">${nameStr} (MRP: ₹${p.sellPrice} / ${unitStr})</option>`;
+        }).join('');
     }
 
     function filterSelectorItems() {
         const txt = document.getElementById('search-dropdown-item').value.toLowerCase();
-        const filtered = allProducts.filter(p => p.name.toLowerCase().includes(txt));
+        const filtered = allProducts.filter(p => p.name.toLowerCase().includes(txt) || (p.nameHi && p.nameHi.toLowerCase().includes(txt)));
         populateBillingDropdown(filtered);
     }
 
     function addItemToCart() {
         const id = document.getElementById('item-selector').value;
-        const qty = parseInt(document.getElementById('item-qty').value) || 1;
+        const qty = parseFloat(document.getElementById('item-qty').value) || 1;
         const disc = parseFloat(document.getElementById('item-discount').value) || 0;
         if(!id) return;
         
         const prod = allProducts.find(p => p.id == id);
         if(!prod) return;
 
-        cart.push({ id: prod.id, name: prod.name, qty: qty, rate: prod.sellPrice, discount: disc });
+        cart.push({ id: prod.id, name: prod.name, nameHi: prod.nameHi || '', qty: qty, rate: prod.sellPrice, discount: disc, unit: prod.unit || 'Pcs' });
         updateBillUI();
-        showToast(`${prod.name} added to invoice stack.`);
+        showToast("Added to Cart.");
+    }
+
+    function removeCartItem(index) {
+        cart.splice(index, 1);
+        updateBillUI();
+        showToast("Item Removed.");
     }
 
     function updateBillUI() {
@@ -476,30 +684,96 @@
 
         const tbody = document.getElementById('bill-items-body');
         let finalPayable = 0;
+        const isHI = currentLang === 'hi';
         
         tbody.innerHTML = cart.map((item, index) => {
             const netAmount = (item.qty * item.rate) - item.discount;
             finalPayable += netAmount;
-            return `<tr><td>${index+1}</td><td>${item.name}</td><td>${item.qty}</td><td>₹${item.rate}</td><td>₹${item.discount.toFixed(2)}</td><td>₹${netAmount.toFixed(2)}</td></tr>`;
+            const printName = isHI && item.nameHi ? item.nameHi : item.name;
+            return `<tr>
+                <td>${index+1}</td>
+                <td>${printName}</td>
+                <td>${item.qty} ${item.unit}</td>
+                <td>₹${item.rate}</td>
+                <td>₹${item.discount.toFixed(2)}</td>
+                <td>₹${netAmount.toFixed(2)}</td>
+                <td class="no-print"><button onclick="removeCartItem(${index})" style="background:var(--danger); border:none; color:white; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;">X</button></td>
+            </tr>`;
         }).join('');
 
         document.getElementById('bill-total').innerText = finalPayable.toFixed(2);
     }
 
     function downloadInvoicePDF() {
+        if(cart.length === 0) { alert("Cart is empty!"); return; }
+        
+        const style = document.createElement('style');
+        style.innerHTML = `@media print { .no-print { display: none !important; } }`;
+        document.head.appendChild(style);
+
         const target = document.getElementById('printable-bill');
         const currentCount = parseInt(localStorage.getItem('billIndexCount') || 1);
-        const opt = { margin: 0.4, filename: `Bill-No-${currentCount}.pdf`, image: { type: 'jpeg', quality: 1.0 }, html2canvas: { scale: 3 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } };
+        
+        const opt = { 
+            margin: 0.4, 
+            filename: `Bill-No-${currentCount}.pdf`, 
+            image: { type: 'jpeg', quality: 1.0 }, 
+            html2canvas: { scale: 3, ignoreElements: (el) => el.classList.contains('no-print') }, 
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
+        };
         
         html2pdf().set(opt).from(target).save();
-        showToast("PDF Invoice Downloaded.");
+        showToast("Downloaded.");
         
         localStorage.setItem('billIndexCount', (currentCount + 1).toString());
         triggerStockDeductionEngine();
     }
 
+    function shareInvoiceOnWhatsApp() {
+        if(cart.length === 0) { alert("Cart is empty!"); return; }
+        const phone = document.getElementById('c-phone').value.trim();
+        if(!phone) { alert("Enter Phone Number!"); return; }
+        
+        const custName = document.getElementById('c-name').value || "Customer";
+        const billNo = localStorage.getItem('billIndexCount') || '1';
+        let total = document.getElementById('bill-total').innerText;
+        const isHI = currentLang === 'hi';
+        
+        let messageText = `*SHRADDHA HARDWARE INVOICE*%0A------------------------------%0A*Bill No:* ${billNo}%0A*Customer:* ${custName}%0A------------------------------%0A`;
+        
+        cart.forEach((item, index) => {
+            let net = (item.qty * item.rate) - item.discount;
+            const finalPrintName = isHI && item.nameHi ? item.nameHi : item.name;
+            messageText += `${index+1}. ${finalPrintName} x ${item.qty} ${item.unit} = ₹${net}%0A`;
+        });
+        
+        messageText += `------------------------------%0A*Total Payable:* ₹${total}%0A%0A_Thank you for visiting Shraddha Hardware!_`;
+        
+        let cleanPhone = phone.replace(/\D/g, '');
+        if(cleanPhone.length === 10) cleanPhone = "91" + cleanPhone;
+        
+        window.open(`https://api.whatsapp.com/send?phone=${cleanPhone}&text=${messageText}`, '_blank');
+    }
+
     function exportBillToExcel() {
-        const data = cart.map(i => ({ Particulars: i.name, Quantity: i.qty, Rate: i.rate, Discount: i.discount, Final: ((i.qty * i.rate) - i.discount) }));
+        if(cart.length === 0) { alert("Cart is empty!"); return; }
+        const custName = document.getElementById('c-name').value || "Walk-in Customer";
+        const custAddr = document.getElementById('c-addr').value || "Not Provided";
+        const isHI = currentLang === 'hi';
+        
+        const data = cart.map(i => {
+            const sheetName = isHI && i.nameHi ? i.nameHi : i.name;
+            return { 
+                "Customer Name": custName, 
+                "Customer Place/Address": custAddr,
+                "Particulars (Item)": sheetName, 
+                "Quantity": `${i.qty} ${i.unit}`, 
+                "Rate (MRP)": i.rate, 
+                "Discount Allowed": i.discount, 
+                "Net Total Amount": ((i.qty * i.rate) - i.discount) 
+            };
+        });
+        
         const ws = XLSX.utils.json_to_sheet(data);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Sales Ledger");
@@ -512,9 +786,11 @@
             if(prod) {
                 const fd = new FormData();
                 fd.append('name', prod.name);
+                fd.append('nameHi', prod.nameHi || '');
+                fd.append('unit', prod.unit || 'Pcs');
                 fd.append('buyPrice', prod.buyPrice);
                 fd.append('sellPrice', prod.sellPrice);
-                fd.append('stockInfo', parseInt(prod.stockInfo || 0) - item.qty);
+                fd.append('stockInfo', parseFloat(prod.stockInfo || 0) - item.qty);
 
                 await fetch(`${API_URL}/${prod.id}`, {
                     method: 'PUT',
@@ -530,12 +806,12 @@
 
     document.getElementById('search-bar').addEventListener('input', (e) => {
         const txt = e.target.value.toLowerCase();
-        renderCustomerCatalog(allProducts.filter(p => p.name.toLowerCase().includes(txt)));
+        renderCustomerCatalog(allProducts.filter(p => p.name.toLowerCase().includes(txt) || (p.nameHi && p.nameHi.toLowerCase().includes(txt))));
     });
 
     document.getElementById('search-private').addEventListener('input', (e) => {
         const txt = e.target.value.toLowerCase();
-        renderPrivateCatalog(allProducts.filter(p => p.name.toLowerCase().includes(txt)));
+        renderPrivateCatalog(allProducts.filter(p => p.name.toLowerCase().includes(txt) || (p.nameHi && p.nameHi.toLowerCase().includes(txt))));
     });
 
     window.onload = loadSystemData;
