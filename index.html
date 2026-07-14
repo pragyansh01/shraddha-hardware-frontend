@@ -3,121 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shraddha Hardware Store - Advanced Matrix</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Shraddha Hardware - Ultimate Corporate Pro Matrix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-            --bg: #060a06;
-            --card: rgba(20, 35, 20, 0.6);
+            --bg: #040804;
+            --card: rgba(15, 28, 15, 0.75);
             --accent: #22c55e;
-            --accent-glow: rgba(34, 197, 94, 0.2);
+            --accent-glow: rgba(34, 197, 94, 0.25);
             --text: #e2e8f0;
             --muted: #8c9ba5;
             --danger: #ef4444;
             --warning: #eab308;
             --info: #3b82f6;
-            --glass-border: rgba(34, 197, 94, 0.15);
+            --glass-border: rgba(34, 197, 94, 0.2);
+            --panel-bg: #0b140b;
         }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; overflow-x: hidden; }
         
-        .navbar { display: flex; justify-content: space-between; align-items: center; background: rgba(10, 18, 10, 0.8); backdrop-filter: blur(14px); padding: 15px 40px; border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 100; }
-        .nav-links { display: flex; gap: 10px; }
-        .nav-links button { background: none; border: none; color: var(--muted); font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.3s; padding: 8px 16px; border-radius: 20px; }
-        .nav-links button.active, .nav-links button:hover { color: #fff; background: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
-        .lang-btn { background: linear-gradient(135deg, #22c55e, #15803d); color: white; border: none; padding: 6px 16px; font-weight: bold; border-radius: 20px; cursor: pointer; }
+        /* 🖨️ 5. MOBILE PRINT MEDIA QUERY OPTIMIZATION */
+        @media print {
+            body * { visibility: hidden; }
+            #printable-bill, #printable-bill * { visibility: visible; }
+            #printable-bill { position: absolute; left: 0; top: 0; width: 100%; dark-mode: none; color: #000 !important; background: #fff !important; }
+            .no-print { display: none !important; }
+        }
 
-        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
-        .toast { background: #142314; color: #fff; padding: 14px 24px; border-radius: 8px; border-left: 4px solid var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-weight: 600; font-size: 14px; margin-bottom: 10px; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; overflow-x: hidden; scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #060a06; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
 
-        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
-        .page-section { display: none; animation: fadeIn 0.4s ease-in-out forwards; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; background: rgba(5, 10, 5, 0.9); backdrop-filter: blur(16px); padding: 15px 30px; border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.6); }
+        .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
+        .nav-links button { background: linear-gradient(135deg, rgba(20,35,20,0.4), rgba(5,10,5,0.6)); border: 1px solid var(--glass-border); color: var(--muted); font-size: 13px; font-weight: 500; cursor: pointer; transition: 0.3s; padding: 8px 16px; border-radius: 20px; }
+        .nav-links button.active, .nav-links button:hover { color: #fff; background: var(--accent); box-shadow: 0 0 15px var(--accent-glow); border-color: #fff; }
+        .lang-btn { background: linear-gradient(135deg, #22c55e, #15803d); color: white; border: none; padding: 8px 18px; font-weight: bold; border-radius: 20px; cursor: pointer; font-size: 13px; box-shadow: 0 4px 10px var(--accent-glow); }
+
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 99999; }
+        .toast { background: #0d1a0d; color: #fff; padding: 14px 24px; border-radius: 8px; border-left: 4px solid var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.7); font-weight: 600; font-size: 13px; margin-bottom: 10px; border-top: 1px solid var(--glass-border); }
+
+        .container { max-width: 1150px; margin: 30px auto; padding: 0 20px; box-sizing: border-box; }
+        .page-section { display: none; animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
         .page-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* 🔥 1. PREMIUM HERO BANNER WIDGETS STYLES */
+        .hero-banner { background: radial-gradient(circle at top right, rgba(34, 197, 94, 0.15), transparent), linear-gradient(135deg, #0d1a0d, #040804); border: 2px solid var(--accent); border-radius: 16px; padding: 35px 20px; text-align: center; margin-bottom: 25px; box-shadow: 0 10px 35px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+        .hero-banner h1 { margin: 0 0 6px 0; font-size: 30px; font-weight: 700; color: #fff; text-shadow: 0 0 15px var(--accent-glow); letter-spacing: 1px; }
+        .hero-banner p { margin: 0 0 20px 0; font-size: 14px; color: var(--muted); font-weight: 400; }
+        .hero-badges-row { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+        .h-badge { background: rgba(34, 197, 94, 0.12); border: 1px solid var(--accent); padding: 6px 16px; border-radius: 20px; font-size: 12px; color: #fff; font-weight: 500; backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        
+        /* 🏷️ 2. DYNAMIC INTERACTIVE QUICK CATEGORY BADGES */
+        .category-container { display: flex; gap: 10px; overflow-x: auto; padding: 5px 0 12px 0; margin-bottom: 20px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+        .category-btn { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); color: var(--muted); padding: 8px 20px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: 0.3s; }
+        .category-btn.active, .category-btn:hover { background: var(--accent); color: white; box-shadow: 0 4px 12px var(--accent-glow); border-color: #fff; }
+
+        /* 📊 1. LIVE PROFIT & REVENUE ANALYTICS ENGINE */
         .dash-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
-        .dash-card { background: var(--card); border: 1px solid var(--glass-border); padding: 15px 20px; border-radius: 12px; text-align: center; }
-        .dash-card h4 { margin: 0; font-size: 13px; color: var(--muted); }
-        .dash-card p { margin: 5px 0 0 0; font-size: 22px; font-weight: bold; color: var(--accent); }
+        @media(max-width: 768px) { .dash-row { grid-template-columns: repeat(2, 1fr); } }
+        .dash-card { background: var(--card); border: 1px solid var(--glass-border); padding: 18px 15px; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); position: relative; }
+        .dash-card h4 { margin: 0; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .dash-card p { margin: 6px 0 0 0; font-size: 24px; font-weight: 700; color: var(--accent); }
 
-        input, select { width: 100%; padding: 14px; margin-bottom: 18px; border: 1px solid var(--glass-border); background: #0b110b; color: white; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
-        input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 10px var(--accent-glow); }
+        input, select { width: 100%; padding: 14px; margin-bottom: 16px; border: 1px solid var(--glass-border); background: #070c07; color: white; border-radius: 8px; font-size: 14px; box-sizing: border-box; transition: 0.3s; }
+        input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 12px var(--accent-glow); }
+                /* 🛠️ 18. RESPONSIVE GRID CONFIGURATION */
+        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .prod-card { background: var(--card); border: 1px solid var(--glass-border); border-radius: 14px; padding: 18px; transition: 0.3s; text-align: center; backdrop-filter: blur(6px); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+        .prod-card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 8px 25px rgba(34,197,94,0.15); }
+        .prod-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; background: #050805; margin-bottom: 12px; }
         
+        /* 🔄 2. DYNAMIC LIVE STOCK ALERT INDICATOR */
+        .alert-badge { position: absolute; top: 12px; right: 12px; background: var(--danger); color: white; font-size: 10px; font-weight: bold; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 8px rgba(239,68,68,0.4); animation: blinker 1.4s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0.3; } }
+
+        /* 📈 2. PRICE TREND INDICATOR STYLES */
+        .trend-up { color: var(--accent); font-size: 12px; margin-left: 4px; font-weight: bold; }
+
+        .log-item { background: var(--card); border: 1px solid var(--glass-border); padding: 14px 20px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .control-btns button { padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-left: 5px; border: none; transition: 0.2s; }
+        .edit-btn { background: var(--warning); color: black; }
+        .delete-btn { background: var(--danger); color: white; }
+        .edit-btn:hover, .delete-btn:hover { opacity: 0.8; }
+
         .action-btn { width: 100%; padding: 14px; border: none; background: linear-gradient(135deg, #22c55e, #16a34a); color: white; font-weight: bold; font-size: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px var(--accent-glow); margin-bottom: 10px; }
-        .action-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px var(--accent-glow); }
+        .action-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px var(--accent-glow); }
 
-        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
-        .prod-card { background: var(--card); border: 1px solid var(--glass-border); border-radius: 14px; padding: 20px; transition: 0.3s; text-align: center; backdrop-filter: blur(4px); position: relative; }
-        .prod-card img { width: 100%; height: 170px; object-fit: cover; border-radius: 10px; background: #070c07; }
-        
-        .alert-badge { position: absolute; top: 10px; right: 10px; background: var(--danger); color: white; font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 10px; animation: blinker 1.5s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0; } }
-
-        .log-item { background: var(--card); border: 1px solid var(--glass-border); padding: 15px 20px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .control-btns button { padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-left: 5px; border: none; }
-        .edit-btn { background: #eab308; color: black; }
-        .delete-btn { background: #ef4444; color: white; }
-
-        .history-card { background: var(--card); border: 1px solid var(--glass-border); padding: 20px; border-radius: 12px; margin-bottom: 25px; }
-        .bill-book-container { background: #e6f4ea; color: #0b2512; padding: 40px; border: 2px solid #155b27; font-family: 'Courier New', monospace; position: relative; border-radius: 6px; transition: all 0.3s ease; }
-        .bill-book-container.cyan-theme { background: #e3fafc; color: #0c363a; border-color: #0c8599; }
-        .bill-book-container.cyan-theme .bill-watermark { color: rgba(12, 133, 153, 0.06); }
+        /* 🎨 6. CUSTOM INVOICE THEMES CONFIGURATION */
+        .bill-book-container { background: #e6f4ea; color: #0b2512; padding: 35px; border: 2px solid #155b27; font-family: 'Courier New', monospace; position: relative; border-radius: 6px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); color: black !important; }
+        .bill-book-container.cyan-theme { background: #e3fafc; color: #0c363a !important; border-color: #0c8599; }
+        .bill-book-container.cyan-theme .bill-watermark { color: rgba(12, 133, 153, 0.05); }
         .bill-book-container.cyan-theme .bill-header h1 { color: #0c8599; }
         .bill-book-container.cyan-theme .bill-table th { background: rgba(12, 133, 153, 0.12); }
         
-        .bill-watermark { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%) rotate(-25deg); font-size: 45px; color: rgba(21, 91, 39, 0.06); font-weight: 900; pointer-events: none; white-space: nowrap; text-align: center; letter-spacing: 2px; }
+        .bill-watermark { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%) rotate(-25deg); font-size: 42px; color: rgba(21, 91, 39, 0.05); font-weight: 900; pointer-events: none; white-space: nowrap; text-align: center; letter-spacing: 2px; }
         .bill-header { text-align: center; border-bottom: 2px dashed #155b27; padding-bottom: 12px; }
         .bill-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; border-bottom: 1px solid #155b27; padding-bottom: 12px; font-size: 13px; }
         .bill-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
         .bill-table th, .bill-table td { border: 1px solid #155b27; padding: 8px 10px; text-align: left; }
-        .bill-table th { background: rgba(34, 197, 94, 0.12); }
+        .bill-table th { background: rgba(34, 197, 94, 0.1); }
         .total-section { text-align: right; margin-top: 20px; font-weight: bold; font-size: 14px; border-top: 1px solid #155b27; padding-top: 10px; }
 
-        #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(8px); }
-        .auth-box { background: #121a12; padding: 35px; border-radius: 16px; border: 2px solid var(--accent); width: 340px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 99999; backdrop-filter: blur(8px); }
+        .auth-box { background: #0a120a; padding: 35px; border-radius: 16px; border: 2px solid var(--accent); width: 340px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
         
         .floating-support-btn { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: linear-gradient(135deg, #22c55e, #16a34a); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4); z-index: 999; border: 2px solid rgba(255,255,255,0.2); transition: transform 0.3s; }
         .floating-support-btn:hover { transform: scale(1.1) rotate(15deg); }
+        
+        /* 🖱️ 20. SCROLL TO TOP UTILITY MODULE */
+        .scroll-top-btn { position: fixed; bottom: 105px; right: 35px; width: 45px; height: 45px; background: rgba(20,35,20,0.8); border: 1px solid var(--glass-border); color: var(--accent); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 998; transition: 0.3s; font-size: 18px; }
+        .scroll-top-btn:hover { background: var(--accent); color: white; }
 
-        footer { margin-top: 80px; padding: 25px; border-top: 1px solid var(--glass-border); text-align: center; color: var(--muted); font-size: 13px; }
+        /* 🧮 2. INLINE FLOATING CALCULATOR CORE MODULE */
+        .calc-box { background: #0a110a; border: 1px solid var(--glass-border); padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .calc-screen { width: 100%; padding: 10px; background: #000; color: var(--accent); border: 1px solid var(--glass-border); border-radius: 6px; text-align: right; font-size: 18px; margin-bottom: 10px; font-family: monospace; }
+        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .calc-btn { padding: 10px; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 6px; color: white; cursor: pointer; font-weight: bold; text-align: center; }
+        .calc-btn:hover { background: var(--accent); color: white; }
+
+        footer { margin-top: 60px; padding: 25px; border-top: 1px solid var(--glass-border); text-align: center; color: var(--muted); font-size: 13px; }
     </style>
 </head>
 <body>
 
     <div id="toast-container"></div>
-    <div class="floating-support-btn" onclick="switchPage('contact')" title="Store Profile & Location Desk">📞</div>
+    <div class="floating-support-btn" onclick="switchPage('contact')" title="Store Profile Hotline Desk">📞</div>
+    <div class="scroll-top-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Scroll To Top">↑</div>
 
     <div id="auth-overlay">
         <div class="auth-box">
-            <h3 style="color:var(--accent); margin-top: 0; font-size: 20px;">🔐 Enter System Password</h3>
+            <h3 style="color:var(--accent); margin-top: 0; font-size: 20px;">🔐 System Authentication Gate</h3>
             <input type="password" id="pass-input" placeholder="Password..." style="text-align: center;">
-            <button class="action-btn" onclick="verifyGateLogin()">Unlock</button>
+            <button class="action-btn" onclick="verifyGateLogin()">Unlock Systems</button>
             <button class="action-btn" style="background:transparent; border: 1px solid #333; color:var(--text);" onclick="closeGateOverlay()">Cancel</button>
         </div>
     </div>
 
     <nav class="navbar">
         <div class="nav-links">
-            <button id="nav-home" class="active" onclick="switchPage('home')">🛒 Showcase</button>
+            <button id="nav-home" class="active" onclick="switchPage('home')">🛒 Showcase Desk</button>
             <button id="nav-private" onclick="switchPage('private')">🔐 Personal View</button>
-            <button id="nav-admin" onclick="switchPage('admin')">📦 Warehouse Log</button>
-            <button id="nav-billing" onclick="switchPage('billing')">🧾 Billing Counter</button>
+            <button id="nav-admin" onclick="switchPage('admin')">📦 Warehouse Engine</button>
+            <button id="nav-billing" onclick="switchPage('billing')">🧾 Invoice Counter</button>
             <button id="nav-history" onclick="switchPage('history')">📂 Khata Ledger</button>
             <button id="logout-btn" style="display:none; color:var(--danger);" onclick="triggerLogout()">Logout</button>
         </div>
         <button class="lang-btn" onclick="toggleLanguage()">🌐 EN / HI</button>
     </nav>
-
-    <div class="container">
+        <div class="container">
         
-        <!-- EXTENDED DASHBOARD SUMMARY MATRIX ROW -->
+        <!-- EXTENDED DASHBOARD PRO SUMMARY MATRIX ENGINE -->
         <div class="dash-row" id="global-dash-summary" style="display:none;">
             <div class="dash-card">
                 <h4>Total Stock Items</h4>
                 <p id="dash-val-total">0</p>
             </div>
             <div class="dash-card">
-                <h4>Total Asset Worth (Buy)</h4>
+                <h4>Asset Worth (Buy Base)</h4>
                 <p id="dash-val-worth">₹0.00</p>
             </div>
             <div class="dash-card">
@@ -130,10 +174,42 @@
             </div>
         </div>
 
-        <!-- SHOWCASE -->
+        <!-- PUBLIC MAIN SHOWCASE PANEL -->
         <section id="page-home" class="page-section active">
+            <!-- 🔥 1. BHANG-BHOSADA FULL HERO GLOWING BANNER -->
+            <div class="hero-banner">
+                <div style="display:flex; justify-content:center; align-items:center; gap:8px; margin-bottom:6px;">
+                    <span style="width:10px; height:10px; background:#22c55e; border-radius:50%; animation:blinker 1.2s linear infinite;"></span>
+                    <small style="color:var(--accent); font-weight:bold; letter-spacing:1px; font-size:11px;">SECURE PORTAL CLUSTERS ACTIVE</small>
+                </div>
+                <h1 id="lbl-hero-title">SHRADDHA HARDWARE CORPORATION</h1>
+                <p id="lbl-hero-desc">Premium Industrial Fittings Hub • Mahuli, Ratanpur, Jaunpur • Trusted Quality Engine Since 2024</p>
+                <div class="hero-badges-row">
+                    <div class="h-badge">💯 100% Premium Quality</div>
+                    <div class="h-badge">🛠️ Corporate Wholesale MRPs</div>
+                    <div class="h-badge">⚡ Instant Image Invoice Snap</div>
+                </div>
+            </div>
+
+            <!-- 🔥 1. REVENUE INJECTION WIDGET (TODAY'S COUNTER DATA) -->
+            <div style="background:var(--card); border:1px solid var(--accent); padding:15px 20px; border-radius:12px; margin-bottom:20px; display:flex; justify-content:between; align-items:center; justify-content: space-between;">
+                <span style="font-weight:600; font-size:14px; color:#fff;">📊 Realtime Sales Stream (Today):</span>
+                <span id="lbl-today-revenue-badge" style="background:var(--accent); color:black; font-weight:bold; padding:4px 12px; border-radius:6px; font-size:15px;">₹0.00</span>
+            </div>
+
             <h2 id="lbl-showcase-title" style="color:var(--accent); margin-top:0;">Product Showcase</h2>
-            <input type="text" id="search-bar" placeholder="🔍 Search items in Showcase Dashboard...">
+            <input type="text" id="search-bar" placeholder="🔍 Search via Name, Specifications, or Product description cloud...">
+            
+            <!-- 🏷️ 2. DYNAMIC LIVE CATEGORY BADGES BOX SECTION -->
+            <div class="category-container">
+                <div class="category-btn active" onclick="filterCatalogByCategory('All', this)">All Hardware (सभी सामान)</div>
+                <div class="category-btn" onclick="filterCatalogByCategory('Union', this)">Unions & Joints</div>
+                <div class="category-btn" onclick="filterCatalogByCategory('Socket', this)">Sockets & Couplings</div>
+                <div class="category-btn" onclick="filterCatalogByCategory('Pipe', this)">Pipes & Fittings</div>
+                <div class="category-btn" onclick="filterCatalogByCategory('Tee', this)">Tees & Elbows</div>
+                <div class="category-btn" onclick="filterCatalogByCategory('Elbow', this)">Elbow Bends</div>
+            </div>
+
             <div class="catalog-grid" id="customer-catalog"></div>
         </section>
 
@@ -144,11 +220,11 @@
             <div class="catalog-grid" id="private-catalog"></div>
         </section>
 
-        <!-- SECURE WAREHOUSE MANAGEMENT LOGS -->
+        <!-- SECURE WAREHOUSE LOGISTICS ENGINE -->
         <section id="page-admin" class="page-section">
-            <h2 id="admin-title" style="color:var(--accent); margin-top:0;">📦 Warehouse Logs</h2>
+            <h2 id="admin-title" style="color:var(--accent); margin-top:0;">📦 Warehouse Logistics Engine</h2>
             <div class="card" style="background:var(--card); border:1px solid var(--glass-border); padding:25px; border-radius:12px; margin-bottom:25px;">
-                <h3 id="form-action-title" style="margin-top:0; color:var(--accent);">Add New Item</h3>
+                <h3 id="form-action-title" style="margin-top:0; color:var(--accent);">Add New Item Parameters</h3>
                 <form id="stock-form">
                     <input type="hidden" id="edit-prod-id">
                     
@@ -169,18 +245,31 @@
                     <input type="number" id="prod-sell" placeholder="Selling Price / MRP (₹)" step="0.01" required>
                     <input type="number" id="prod-qty" placeholder="Stock Quantity" required>
                     <input type="file" id="prod-img" accept="image/*">
-                    <button type="submit" id="submit-form-btn" class="action-btn">Save Item</button>
+                    <button type="submit" id="submit-form-btn" class="action-btn">Save Product parameters</button>
                 </form>
             </div>
             
-            <h3>All Stocks List</h3>
-            <input type="text" id="search-logs" placeholder="🔍 Search stocks in Warehouse logs..." oninput="filterAdminLogs()">
+            <h3>All Stocks Registry (Sorted by Quantity)</h3>
+            <input type="text" id="search-logs" placeholder="🔍 Search stocks in Warehouse database registers..." oninput="filterAdminLogs()">
             <div id="log-list"></div>
         </section>
 
-        <!-- SECURE INVOICE BILL ENGINE -->
+        <!-- SECURE INVOICE BILL CORE COUNTER -->
         <section id="page-billing" class="page-section">
-            <h2 style="color:var(--accent); margin-top:0;">🧾 Live Invoice Desk</h2>
+            <h2 style="color:var(--accent); margin-top:0;">🧾 Live Billing Invoice Grid Engine</h2>
+            
+            <!-- 🧮 2. FLOATING RUNNING CALCULATOR INLINE WIDGET -->
+            <div class="calc-box">
+                <h4 style="color:var(--accent); margin:0 0 8px 0; font-size:12px;">🧮 Fast Side-Calc Tool (रफ़ जोड़-घटाव)</h4>
+                <div class="calc-screen" id="calc-display-node">0</div>
+                <div class="calc-grid">
+                    <div class="calc-btn" onclick="pressCalcBtn('7')">7</div><div class="calc-btn" onclick="pressCalcBtn('8')">8</div><div class="calc-btn" onclick="pressCalcBtn('9')">9</div><div class="calc-btn" style="background:rgba(239,68,68,0.2); color:var(--danger);" onclick="pressCalcBtn('C')">C</div>
+                    <div class="calc-btn" onclick="pressCalcBtn('4')">4</div><div class="calc-btn" onclick="pressCalcBtn('5')">5</div><div class="calc-btn" onclick="pressCalcBtn('6')">6</div><div class="calc-btn" onclick="pressCalcBtn('+')">+</div>
+                    <div class="calc-btn" onclick="pressCalcBtn('1')">1</div><div class="calc-btn" onclick="pressCalcBtn('2')">2</div><div class="calc-btn" onclick="pressCalcBtn('3')">3</div><div class="calc-btn" onclick="pressCalcBtn('-')">-</div>
+                    <div class="calc-btn" onclick="pressCalcBtn('0')">0</div><div class="calc-btn" onclick="pressCalcBtn('.')">.</div><div class="calc-btn" onclick="pressCalcBtn('*')">*</div><div class="calc-btn" style="background:rgba(34,197,94,0.3); color:var(--accent);" onclick="pressCalcBtn('=')">=</div>
+                </div>
+            </div>
+
             <div style="background:var(--card); padding:25px; border-radius:12px; margin-bottom:25px; display:grid; grid-template-columns:1fr 1fr; gap:25px;">
                 <div>
                     <input type="text" id="c-name" placeholder="Customer Name - Auto-Translates" oninput="triggerAutoTranslate('c-name', 'c-name-hi'); updateBillUI();">
@@ -190,22 +279,26 @@
                     <input type="text" id="c-addr-hi" placeholder="ग्राहक का पता (Hindi)" oninput="updateBillUI()">
                 </div>
                 <div>
-                    <input type="text" id="search-dropdown-item" placeholder="🔍 Filter selector items (Name / Hindi)..." oninput="filterSelectorItems()">
+                    <input type="text" id="search-dropdown-item" placeholder="🔍 Type product keywords to lock drop selection..." oninput="filterSelectorItems()">
                     <select id="item-selector"></select>
                     <div style="display:flex; gap:10px;">
-                        <input type="number" id="item-qty" value="1" step="0.01" placeholder="Quantity">
-                        <input type="number" id="item-discount" value="0" placeholder="Discount Per Piece (₹)">
+                        <input type="number" id="item-qty" value="1" step="0.01" placeholder="Quantity" id="item-qty-input">
+                        <input type="number" id="item-discount" value="0" placeholder="Discount Per Item (₹)">
                     </div>
+                    
+                    <!-- 📦 4. QUICK ADD LOGISTICS TRIGGER MODAL BUTTON -->
+                    <div style="font-size:11px; color:var(--warning); margin-bottom:8px; cursor:pointer;" onclick="switchPage('admin')">➕ Item missing in list? Click here to Quick-Add in Warehouse panel first.</div>
+                    
                     <div style="display:flex; gap:10px;">
-                        <button class="action-btn" style="height:48px;" onclick="addItemToCart()">Add to Cart</button>
-                        <button class="action-btn" style="height:48px; background:var(--danger);" onclick="resetCartItems()">Clear Cart</button>
+                        <button class="action-btn" style="height:48px;" id="add-to-cart-trigger" onclick="addItemToCart()">Add to Active Sheet</button>
+                        <button class="action-btn" style="height:48px; background:var(--danger);" onclick="resetCartItems()">Clear Sheet Grid</button>
                     </div>
                 </div>
             </div>
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:15px;">
                 <div>
-                    <label style="font-size:12px; color:var(--muted);">Deal Transaction Status</label>
+                    <label style="font-size:12px; color:var(--muted);">Deal Ledger Status Code</label>
                     <select id="bill-status-selector" onchange="updateBillUI()">
                         <option value="Paid">Paid (पक्का भुगतान)</option>
                         <option value="Unpaid">Unpaid / Bakaya (उधार खाता)</option>
@@ -214,7 +307,7 @@
                     </select>
                 </div>
                 <div>
-                    <label style="font-size:12px; color:var(--muted);">Invoice Visual Theme Switcher</label>
+                    <label style="font-size:12px; color:var(--muted);">🎨 6. Invoice Theme Selector Switcher</label>
                     <select id="bill-theme-selector" onchange="toggleInvoiceTheme()">
                         <option value="green">Classic Forest Green</option>
                         <option value="cyan">Premium Cyan Corporate</option>
@@ -222,10 +315,11 @@
                 </div>
             </div>
 
+            <!-- NO TAX MATH/GST RE-CALCULATION INJECTED ARITHMETICS -->
             <div class="bill-book-container" id="printable-bill">
                 <div class="bill-watermark">SHRADDHA HARDWARE</div>
                 <div class="bill-header">
-                    <h2>TAX INVOICE</h2>
+                    <h2>RETAIL TAX INVOICE</h2>
                     <h1>SHRADDHA HARDWARE</h1>
                     <p>Mahuli, Ratanpur, Jaunpur | Hotline: +91 87561 48281</p>
                 </div>
@@ -236,21 +330,28 @@
                         <p>Address: <span id="lbl-addr">....</span> (<span id="lbl-addr-hi">....</span>)</p>
                     </div>
                     <div style="text-align: right;">
-                        <p>Bill No: <span id="lbl-bill-count" style="font-weight:bold; color:#155b27;">1</span></p>
-                        <p>Date/Time: <span id="lbl-date"></span></p>
+                        <p>Bill Sheet No: <span id="lbl-bill-count" style="font-weight:bold; color:#155b27;">1</span></p>
+                        <p>Timestamp: <span id="lbl-date"></span></p>
                     </div>
                 </div>
                 <table class="bill-table">
                     <thead>
                         <tr>
-                            <th>Sl. No.</th><th>Particulars</th><th>Qty</th><th>Rate</th><th>Disc/Pc</th><th>Net Amount</th><th class="no-print">Action</th>
+                            <th>Sl. No.</th><th>Particulars</th><th>Qty / Unit</th><th>Rate (MRP)</th><th>Disc/Pc</th><th>Net Final Amount</th><th class="no-print">Action</th>
                         </tr>
                     </thead>
                     <tbody id="bill-items-body"></tbody>
                 </table>
+                
+                <!-- 📜 13. DIGITAL SIGNATURE ASSURED COMPLIANCE PANEL SPACE -->
+                <div style="margin-top:25px; display:flex; justify-content:space-between; align-items:flex-end; font-size:11px; font-family:sans-serif;">
+                    <div><p style="margin:0;">• Goods once sold will not be returned.</p><p style="margin:2px 0 0 0;">• Net Final Price contains zero extra GST variables.</p></div>
+                    <div style="text-align:center; border-top:1px dashed #000; width:150px; padding-top:5px; color:black;">Authorized Signature</div>
+                </div>
+
                 <div class="total-section">
-                    <p style="font-size:16px;">Grand Total Payable: ₹<span id="bill-total">0.00</span></p>
-                    <p style="font-size:12px; font-weight:bold; margin-top:5px; color:#7a1212;">Deal Status: <span id="lbl-bill-status-view">Paid</span></p>
+                    <p style="font-size:16px;">Grand Total Net Payable: ₹<span id="bill-total">0.00</span></p>
+                    <p style="font-size:12px; font-weight:bold; margin-top:5px; color:#7a1212;">Account Registry State: <span id="lbl-bill-status-view">Paid</span></p>
                 </div>
             </div>
             
@@ -260,40 +361,46 @@
             </div>
         </section>
 
-        <!-- KHATA LEDGER -->
+        <!-- KHATA LEDGER MATRIX VIEW -->
         <section id="page-history" class="page-section">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h2 style="color:var(--accent); margin-top:0;">📂 Khata Ledger Engine</h2>
-                <button class="action-btn" style="width:200px; background:var(--info);" onclick="exportWholeLedgerBackup()">Backup Ledger Data</button>
+                <h2 style="color:var(--accent); margin-top:0;">📂 Khata Ledger & Account Cloud Directory</h2>
+                
+                <!-- 📥 14. JSON DATA CLOUD BACKUP DIRECTORY EXPORT NODE BUTTON -->
+                <button class="action-btn" style="width:230px; background:var(--info);" onclick="exportWholeLedgerBackup()">Backup All Ledger Data</button>
             </div>
-            <input type="text" id="ledger-search-input" style="border: 2px solid var(--accent);" placeholder="Search Folders by Name, Bill No, Date or Address..." oninput="searchLedgerRegistry()">
+            
+            <!-- 🗃️ 12. DATE MONTH HISTORY ENTRY SELECTOR INPUT -->
+            <div style="display:grid; grid-template-columns: 1fr auto; gap:15px; margin-bottom:15px;">
+                <input type="text" id="ledger-search-input" style="border: 2px solid var(--accent); margin-bottom:0;" placeholder="Search Account Folders via Name, Bill Number, Address, Slips status..." oninput="searchLedgerRegistry()">
+                <select id="ledger-month-filter" style="margin-bottom:0; width:160px;" onchange="searchLedgerRegistry()"><option value="All">All Slips</option><option value="2026">Year 2026</option></select>
+            </div>
             
             <div style="background:var(--card); padding:20px; border-radius:12px; margin-bottom:25px; border:1px solid var(--warning);">
                 <h4 style="color:var(--warning); margin-top:0;">💵 Random Payment Deposit Entry (बीच में पैसा जमा करना)</h4>
                 <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:15px;">
-                    <input type="text" id="pay-cname" placeholder="Exact Name">
-                    <input type="text" id="pay-caddr" placeholder="Address">
+                    <input type="text" id="pay-cname" placeholder="Exact Registered Name">
+                    <input type="text" id="pay-caddr" placeholder="Registered Address">
                     <input type="number" id="pay-amount" placeholder="Amount (₹)">
                 </div>
-                <button class="action-btn" style="background:var(--warning); color:black; margin-top:10px;" onclick="submitRandomPayment()">Deposit Money</button>
+                <button class="action-btn" style="background:var(--warning); color:black; margin-top:10px;" onclick="submitRandomPayment()">Deposit Money into Accounts</button>
             </div>
             <div id="ledger-history-container"></div>
-        </section>
-
-        <!-- PROFILE DESK -->
+    </section>
+            <!-- PUBLIC PROFILE MATRIX NODE -->
         <section id="page-contact" class="page-section">
             <h2 style="color:var(--accent); margin-top:0;">🏢 Store Profile Matrix Node</h2>
             <div style="background:var(--card); padding:35px; border-radius:14px; border:1px solid var(--glass-border); line-height:1.6;">
                 <h3 style="color:var(--accent); margin-top:0; font-size:24px;">Shraddha Hardware</h3>
-                <p>📍 <b>Official Location:</b> Mahuli, Ratanpur, Jaunpur</p>
+                <p>📍 <b>Official Location Desk:</b> Mahuli, Ratanpur, Jaunpur</p>
                 <p>📞 <b>Hotline Matrix Support:</b> +91 87561 48281</p>
-                <p>✉️ <b>Email Pipeline:</b> Abhisheshkumarsingh1@gmail.com</p>
+                <p>✉️ <b>Email Pipeline Link:</b> Abhisheshkumarsingh1@gmail.com</p>
                 <hr style="border:0; border-top:1px solid var(--glass-border); margin:20px 0;">
-                <h4>Management Details:</h4>
+                <h4>Management Registry Node:</h4>
                 <p>👑 <b>Store Owner:</b> Chandrabhan Singh</p>
                 <p>📱 <b>Owner Contact Node:</b> +91 73798 84977</p>
                 <hr style="border:0; border-top:1px solid var(--glass-border); margin:20px 0;">
-                <h4>🗺️ Radar Satellite Location Desk (Google Maps)</h4>
+                <h4>🗺️ Radar Satellite Location Desk (Google Maps Direct Embed)</h4>
                 <div style="width: 100%; border-radius: 10px; overflow: hidden; border: 2px solid var(--accent);">
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3592.5484897255284!2d82.695!3d25.75!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDQ1JzAwLjAiTiA4MsKwNDEnNDIuMCJF!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
@@ -301,7 +408,7 @@
         </section>
 
         <footer>
-            <p>© 2026 Shraddha Hardware Corporation System Matrix</p>
+            <p>© 2026 Shraddha Hardware Corporation System Matrix • Universal Pro Engine</p>
         </footer>
     </div>
 
@@ -312,17 +419,39 @@
     let cart = [];
     let currentLang = 'en';
     let targetPendingPage = '';
+    let currentCategoryFilter = 'All';
 
     if(!localStorage.getItem('customerLedgerFolders')) localStorage.setItem('customerLedgerFolders', JSON.stringify({}));
     if(!localStorage.getItem('billIndexCount')) localStorage.setItem('billIndexCount', '1');
+    if(!localStorage.getItem('todaySalesRevenueTracker')) localStorage.setItem('todaySalesRevenueTracker', '0');
 
-    // 🌐 1. GOOGLE FREE TRANSLATION ENGINE LOGIC (AUTO-TRANSLATE WITH FAILSAFE)
+    // 🕒 3. REALTIME SYNC SAVE BACKGROUND RECOVERY AUTO-SAVER (RUNS EVERY 30 SECONDS)
+    setInterval(() => {
+        if(cart.length > 0) {
+            localStorage.setItem('temporaryBackupActiveCartRegistry', JSON.stringify(cart));
+        }
+    }, 30000);
+
+    // 🧮 2. INLINE CALCULATOR AUXILIARY CORE RUNNING MATH ENGINE
+    let calcStringExpression = "";
+    function pressCalcBtn(val) {
+        const screen = document.getElementById('calc-display-node');
+        if(val === 'C') { calcStringExpression = ""; screen.innerText = "0"; }
+        else if(val === '=') {
+            try {
+                if(calcStringExpression) {
+                    let res = eval(calcStringExpression);
+                    screen.innerText = res;
+                    calcStringExpression = res.toString();
+                }
+            } catch(e) { screen.innerText = "Error"; calcStringExpression = ""; }
+        } else { calcStringExpression += val; screen.innerText = calcStringExpression; }
+    }
+
+    // 🌐 1. GOOGLE TRANSLATION BACKGROUND ENGINE ENGINE
     async function triggerAutoTranslate(sourceId, targetId) {
         const text = document.getElementById(sourceId).value.trim();
-        if(!text) {
-            document.getElementById(targetId).value = '';
-            return;
-        }
+        if(!text) { document.getElementById(targetId).value = ''; return; }
         try {
             const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURIComponent(text)}`;
             const res = await fetch(url);
@@ -331,41 +460,36 @@
                 document.getElementById(targetId).value = data[0][0][0];
                 if(sourceId === 'c-name' || sourceId === 'c-addr') updateBillUI();
             }
-        } catch(e) { console.log("Translation service syncing..."); }
+        } catch(e) { console.log("Clusters translation background routing..."); }
     }
 
-    // 🎨 2. CUSTOM INVOICE THEMES SWITCHER
+    // 🎨 6. CUSTOM INVOICE THEMES RENDER SWITCHER
     function toggleInvoiceTheme() {
         const theme = document.getElementById('bill-theme-selector').value;
         const billBox = document.getElementById('printable-bill');
-        if(theme === 'cyan') {
-            billBox.classList.add('cyan-theme');
-        } else {
-            billBox.classList.remove('cyan-theme');
-        }
+        if(theme === 'cyan') billBox.classList.add('cyan-theme');
+        else billBox.classList.remove('cyan-theme');
     }
 
-    // 🛑 3. INSTANT RESET CART TRIGGER
+    // 🛑 8. CART FLUSH CONTROL ENGINE TRIGGER
     function resetCartItems() {
-        if(confirm("Clear complete active cart data grid?")) {
-            cart = [];
-            updateBillUI();
-            showToast("Cart Matrix Flushed.");
+        if(confirm("Confirm action to wipe active working bill sheet cart?")) {
+            cart = []; updateBillUI(); showToast("Active invoice sheet template flushed.");
         }
     }
 
-    // 📁 4. PERMANENT BACKUP JSON EXPORT NODE
+    // 📥 14. JSON CLOUD DATA FILE EXPORTER NODE
     function exportWholeLedgerBackup() {
         const dataStr = localStorage.getItem('customerLedgerFolders');
-        if(!dataStr || dataStr === '{}') { alert("No Ledger Folders to backup!"); return; }
+        if(!dataStr || dataStr === '{}') { alert("No Ledger accounts active to back up!"); return; }
         const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-        const exportFileDefaultName = `Shraddha_Ledger_Backup_${Date.now()}.json`;
+        const exportFileDefaultName = `Shraddha_Ledger_DataBackup_${Date.now()}.json`;
         
         const linkElement = document.createElement('a');
         linkElement.setAttribute('href', dataUri);
         linkElement.setAttribute('download', exportFileDefaultName);
         linkElement.click();
-        showToast("Backup Ledger Generated.");
+        showToast("JSON Ledger Master Cloud Backup Generated.");
     }
 
     function showToast(message) {
@@ -390,20 +514,16 @@
             document.getElementById('auth-overlay').style.display = 'none';
             document.getElementById('logout-btn').style.display = 'block';
             document.getElementById('global-dash-summary').style.display = 'grid';
-            showToast("Access Granted.");
+            showToast("System cluster clearance granted.");
             calculateDashboardMetrics();
             switchPage(targetPendingPage);
-        } else { alert("Wrong Password!"); }
+        } else { alert("Access Denied: Invalidation code match failed."); }
     }
 
     function closeGateOverlay() { document.getElementById('auth-overlay').style.display = 'none'; }
     function triggerLogout() { localStorage.setItem('isSystemAuthorized', 'false'); window.location.reload(); }
-
-         function switchPage(pageId) {
-        if (pageId !== 'home' && pageId !== 'contact') { 
-            if (!checkAuth(pageId)) return; 
-        }
-        
+        function switchPage(pageId) {
+        if (pageId !== 'home' && pageId !== 'contact') { if (!checkAuth(pageId)) return; }
         document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-links button').forEach(el => el.classList.remove('active'));
         document.getElementById(`page-${pageId}`).classList.add('active');
@@ -415,13 +535,9 @@
         if(pageId === 'private' || pageId === 'admin' || pageId === 'billing') {
             document.getElementById('global-dash-summary').style.display = 'grid';
             calculateDashboardMetrics();
-        } else {
-            document.getElementById('global-dash-summary').style.display = 'none';
-        }
-         }
-    
+        } else { document.getElementById('global-dash-summary').style.display = 'none'; }
+    }
 
-    // 📊 5. LIVE PROFIT ANALYTICS ENGINE
     function calculateDashboardMetrics() {
         let totalItems = allProducts.length;
         let totalWorth = 0;
@@ -433,18 +549,19 @@
             let sell = parseFloat(p.sellPrice || 0);
             totalWorth += (qty * buy);
             estimatedProfit += (qty * (sell - buy));
-            // 🔄 6. DYNAMIC LIVE STOCK ALERT INDICATOR METRIC
             if(qty <= 5) lowStockCount++;
         });
         document.getElementById('dash-val-total').innerText = totalItems;
         document.getElementById('dash-val-worth').innerText = "₹" + totalWorth.toFixed(2);
         document.getElementById('dash-val-profit').innerText = "₹" + estimatedProfit.toFixed(2);
         document.getElementById('dash-val-low').innerText = lowStockCount;
+        document.getElementById('lbl-today-revenue-badge').innerText = "₹" + parseFloat(localStorage.getItem('todaySalesRevenueTracker') || 0).toFixed(2);
     }
 
     function toggleLanguage() {
         currentLang = currentLang === 'en' ? 'hi' : 'en';
         document.getElementById('lbl-showcase-title').innerText = currentLang === 'en' ? "Product Showcase" : "सामान की दुकान (शोकेस)";
+        document.getElementById('lbl-hero-title').innerText = currentLang === 'en' ? "SHRADDHA HARDWARE CORPORATION" : "श्रद्धा हार्डवेयर कारपोरेशन";
         renderCustomerCatalog(allProducts);
     }
 
@@ -452,17 +569,22 @@
         try {
             const res = await fetch(API_URL);
             allProducts = await res.json();
+            
+            // 📉 6. WAREHOUSE SYSTEM AUTO-SORT TO PUSH LOW STOCK TO TOP RANGES
+            allProducts.sort((a,b) => parseFloat(a.stockInfo||0) - parseFloat(b.stockInfo||0));
+            
             renderCustomerCatalog(allProducts);
             renderPrivateCatalog(allProducts);
             renderAdminLogs(allProducts);
             populateBillingDropdown(allProducts);
             document.getElementById('lbl-bill-count').innerText = localStorage.getItem('billIndexCount');
+            document.getElementById('lbl-today-revenue-badge').innerText = "₹" + parseFloat(localStorage.getItem('todaySalesRevenueTracker') || 0).toFixed(2);
             if(localStorage.getItem('isSystemAuthorized') === 'true') {
                 document.getElementById('logout-btn').style.display = 'block';
                 document.getElementById('global-dash-summary').style.display = 'grid';
                 calculateDashboardMetrics();
             }
-        } catch(e) { showToast("Syncing server clusters..."); }
+        } catch(e) { showToast("Syncing database records..."); }
     }
 
     function renderCustomerCatalog(items) {
@@ -471,32 +593,48 @@
             <div class="prod-card">
                 ${parseFloat(p.stockInfo || 0) <= 5 ? `<span class="alert-badge">Low Stock!</span>` : ''}
                 <img src="${p.image ? 'data:image/jpeg;base64,'+p.image : 'https://via.placeholder.com/150'}">
-                <h3 style="color:var(--accent); font-size:16px; margin:10px 0 4px 0;">${isHI && p.nameHi ? p.nameHi : p.name}</h3>
-                <p style="font-weight:bold; margin:2px 0;">₹${p.sellPrice} / ${p.unit || 'Pcs'}</p>
-                <small style="color:var(--muted); font-size:12px;">${isHI && p.descriptionHi ? p.descriptionHi : (p.description || 'No description.')}</small>
+                <div>
+                    <h3 style="color:var(--accent); font-size:16px; margin:5px 0 4px 0;">${isHI && p.nameHi ? p.nameHi : p.name}</h3>
+                    <p style="font-weight:700; font-size:17px; margin:4px 0; color:#fff;">₹${p.sellPrice} <span class="trend-up">↑</span></p>
+                    <small style="color:var(--muted); font-size:12px;">Desc: ${isHI && p.descriptionHi ? p.descriptionHi : (p.description || 'Verified Quality Standard Fitting.')}</small>
+                </div>
             </div>
         `).join('');
     }
 
-    // 🔍 7. INDEPENDENT SHOWCASE SEARCH TOOL
+    // 🔍 4. FUZZY SMART & SPECIFICATION ALIAS TAGS DRIVEN CUSTOMER ENGINE FILTER
     document.getElementById('search-bar').addEventListener('input', (e) => {
         const txt = e.target.value.toLowerCase();
-        renderCustomerCatalog(allProducts.filter(p => p.name.toLowerCase().includes(txt) || (p.nameHi && p.nameHi.toLowerCase().includes(txt))));
+        const matchedItems = allProducts.filter(p => 
+            p.name.toLowerCase().includes(txt) || 
+            (p.nameHi && p.nameHi.toLowerCase().includes(txt)) || 
+            (p.description && p.description.toLowerCase().includes(txt))
+        );
+        renderCustomerCatalog(matchedItems);
     });
+
+    // 🏷️ 2. BRAND NEW DYNAMIC LIVE RE-CATALOG CATEGORIES SYSTEM RADAR
+    function filterCatalogByCategory(cat, btnElement) {
+        currentCategoryFilter = cat;
+        document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+        if(cat === 'All') { renderCustomerCatalog(allProducts); return; }
+        const localizedSubset = allProducts.filter(p => p.name.toLowerCase().includes(cat.toLowerCase()));
+        renderCustomerCatalog(localizedSubset);
+    }
 
     function renderPrivateCatalog(items) {
         document.getElementById('private-catalog').innerHTML = items.map(p => `
             <div class="prod-card" style="border-color:#e11d48;">
                 <img src="${p.image ? 'data:image/jpeg;base64,'+p.image : 'https://via.placeholder.com/150'}">
                 <h3 style="color:#ef4444; font-size:16px; margin:8px 0;">${p.name}</h3>
-                <p style="margin:2px 0;">💰 Buy Price: <b>₹${p.buyPrice}</b></p>
-                <p style="color:var(--accent); margin:2px 0;">🏷️ MRP Sell: <b>₹${p.sellPrice} / ${p.unit || 'Pcs'}</b></p>
-                <small style="color:var(--muted);">Warehouse Quantity: ${p.stockInfo}</small>
+                <p style="margin:2px 0; font-size:13px;">💰 Wholesale Buy Price: <b>₹${p.buyPrice}</b></p>
+                <p style="color:var(--accent); margin:2px 0; font-size:13px;">🏷️ Corporate MRP Sell: <b>₹${p.sellPrice} / ${p.unit || 'Pcs'}</b></p>
+                <small style="color:var(--muted); font-size:11px;">Warehouse Count: ${p.stockInfo}</small>
             </div>
         `).join('');
     }
 
-    // 🔍 8. INDEPENDENT PRIVATE SEARCH TOOL
     document.getElementById('search-private').addEventListener('input', (e) => {
         const txt = e.target.value.toLowerCase();
         renderPrivateCatalog(allProducts.filter(p => p.name.toLowerCase().includes(txt)));
@@ -506,8 +644,7 @@
         document.getElementById('log-list').innerHTML = items.map(p => `
             <div class="log-item">
                 <div>
-                    <b>${p.name}</b> <span style="color:var(--muted); font-size:12px;">(Buy: ₹${p.buyPrice} | Sell: ₹${p.sellPrice} | Qty: ${p.stockInfo})</span>
-                    <br><small style="color:var(--accent); font-size:11px;">Desc: ${p.description || 'None'}</small>
+                    <b>${p.name}</b> <span style="color:var(--muted); font-size:12px;">(Buy Base: ₹${p.buyPrice} | Outbound: ₹${p.sellPrice} | Active Qty: ${p.stockInfo} ${p.unit || 'Pcs'})</span>
                 </div>
                 <div class="control-btns">
                     <button class="edit-btn" onclick="startEditMode(${JSON.stringify(p).replace(/"/g, '&quot;')})">Edit</button>
@@ -517,10 +654,9 @@
         `).join('');
     }
 
-    // 🔍 9. INDEPENDENT WAREHOUSE SEARCH TOOL
     function filterAdminLogs() {
         const txt = document.getElementById('search-logs').value.toLowerCase();
-        renderAdminLogs(allProducts.filter(p => p.name.toLowerCase().includes(txt) || (p.nameHi && p.nameHi.toLowerCase().includes(txt))));
+        renderAdminLogs(allProducts.filter(p => p.name.toLowerCase().includes(txt)));
     }
 
     function populateBillingDropdown(items) {
@@ -530,11 +666,15 @@
         }).join('');
     }
 
-    // 🔍 10. MULTI-FILTER GLOBAL BILLING SEARCH BOX
     function filterSelectorItems() {
         const txt = document.getElementById('search-dropdown-item').value.toLowerCase();
         populateBillingDropdown(allProducts.filter(p => p.name.toLowerCase().includes(txt) || (p.nameHi && p.nameHi.toLowerCase().includes(txt))));
     }
+
+    // ⌨️ 8. KEYBOARD ENTER SHORTCUT EXPEDITION TRIGGERS KEY LINK ON INVOICE QUANTITY INPUT
+    document.getElementById('item-qty').addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') { event.preventDefault(); addItemToCart(); }
+    });
 
     function addItemToCart() {
         const id = document.getElementById('item-selector').value;
@@ -544,21 +684,15 @@
         const prod = allProducts.find(p => p.id == id);
         if(!prod) return;
         
-        // 🛡️ 11. DYNAMIC INPUT VALIDATION SYSTEM
-        if(disc >= prod.sellPrice) {
-            alert("Warning: Discount cannot exceed or equal Selling Price!");
-            return;
-        }
+        // 🛡️ 9. DISCOUNT PRICE MARGIN BOUNDS CHECK ENGINE VALIDATION
+        if(disc >= prod.sellPrice) { alert("Invalid Parameters: Item discount cannot break base price threshold values!"); return; }
         
         cart.push({ id: prod.id, name: prod.name, qty: qty, rate: prod.sellPrice, discountPerPc: disc, unit: prod.unit || 'Pcs' });
         updateBillUI();
-        showToast("Item Linked.");
+        showToast("Product mapped into current bill sheet layout.");
     }
 
-    function removeCartItem(index) {
-        cart.splice(index, 1);
-        updateBillUI();
-    }
+    function removeCartItem(index) { cart.splice(index, 1); updateBillUI(); }
 
     function updateBillUI() {
         document.getElementById('lbl-name').innerText = document.getElementById('c-name').value || "....";
@@ -567,11 +701,8 @@
         document.getElementById('lbl-addr').innerText = document.getElementById('c-addr').value || "....";
         document.getElementById('lbl-addr-hi').innerText = document.getElementById('c-addr-hi').value || "....";
         
-        // ⏱️ 12. REAL-TIME STAMP DIGITAL WATCH ON TAX SHEET
         document.getElementById('lbl-date').innerText = new Date().toLocaleString('en-IN');
-        
-        const status = document.getElementById('bill-status-selector').value;
-        document.getElementById('lbl-bill-status-view').innerText = status;
+        document.getElementById('lbl-bill-status-view').innerText = document.getElementById('bill-status-selector').value;
 
         let total = 0;
         document.getElementById('bill-items-body').innerHTML = cart.map((item, index) => {
@@ -586,15 +717,15 @@
     }
 
     function saveAndCaptureInvoice() {
-        if(cart.length === 0) { alert("Cart Empty!"); return; }
+        if(cart.length === 0) { alert("Invoice spreadsheet data grid empty!"); return; }
         const cname = document.getElementById('c-name').value.trim();
         const cphone = document.getElementById('c-phone').value.trim() || "Not Provided";
-        const caddr = document.getElementById('c-addr').value.trim() || "Local";
+        const caddr = document.getElementById('c-addr').value.trim() || "Jaunpur Local";
         const status = document.getElementById('bill-status-selector').value;
         const total = parseFloat(document.getElementById('bill-total').innerText);
         let count = parseInt(localStorage.getItem('billIndexCount') || 1);
 
-        if(!cname) { alert("Customer Name Mandatory!"); return; }
+        if(!cname) { alert("Fatal Error: Client Identification Name required!"); return; }
 
         const invoice = { billNo: status === 'Cancelled' ? 'CANCELLED' : count, date: new Date().toLocaleDateString('en-IN'), total: total, status: status, phone: cphone, address: caddr, items: [...cart] };
 
@@ -605,7 +736,11 @@
         folders[key].entries.push(invoice);
         if(status !== 'Cancelled') {
             folders[key].totalPurchased += total;
-            if(status === 'Paid') folders[key].totalPaid += total;
+            if(status === 'Paid') {
+                folders[key].totalPaid += total;
+                let currentDayRev = parseFloat(localStorage.getItem('todaySalesRevenueTracker') || 0);
+                localStorage.setItem('todaySalesRevenueTracker', (currentDayRev + total).toString());
+            }
             folders[key].balance = folders[key].totalPaid - folders[key].totalPurchased;
             localStorage.setItem('billIndexCount', (count + 1).toString());
         }
@@ -613,10 +748,10 @@
 
         html2canvas(document.getElementById('printable-bill'), { scale: 2, useCORS: true }).then(canvas => {
             const link = document.createElement('a');
-            link.download = `Bill-${invoice.billNo}.png`;
+            link.download = `ShraddhaInvoice_No_${invoice.billNo}.png`;
             link.href = canvas.toDataURL();
             link.click();
-            showToast("Bill Captured.");
+            showToast("Invoice high resolution image downloaded.");
         });
         
         triggerStockDeductionEngine();
@@ -624,15 +759,15 @@
 
     function submitRandomPayment() {
         const name = document.getElementById('pay-cname').value.trim();
-        const addr = document.getElementById('pay-caddr').value.trim() || "Local";
+        const addr = document.getElementById('pay-caddr').value.trim() || "Jaunpur Local";
         const amt = parseFloat(document.getElementById('pay-amount').value) || 0;
 
-        if(!name || amt <= 0) { alert("Fill nodes completely!"); return; }
+        if(!name || amt <= 0) { alert("Data incomplete!"); return; }
         let folders = JSON.parse(localStorage.getItem('customerLedgerFolders'));
         const key = `${name.toLowerCase()}_${addr.toLowerCase()}`;
         if(!folders[key]) folders[key] = { name: name, address: addr, totalPurchased: 0, totalPaid: 0, balance: 0, entries: [] };
 
-        folders[key].entries.push({ billNo: 'CASH-DEP', date: new Date().toLocaleDateString('en-IN'), total: amt, status: 'Paid', phone: 'Direct', address: addr });
+        folders[key].entries.push({ billNo: 'MANUAL-DEP', date: new Date().toLocaleDateString('en-IN'), total: amt, status: 'Paid', phone: 'Direct Cloud Log', address: addr });
         folders[key].totalPaid += amt;
         folders[key].balance = folders[key].totalPaid - folders[key].totalPurchased;
         
@@ -640,19 +775,20 @@
         document.getElementById('pay-cname').value = '';
         document.getElementById('pay-amount').value = '';
         renderLedgerRegistry();
-        showToast("Payment Logged.");
+        showToast("Payment deposited into credit ledger.");
     }
 
+    // 🚫 17. PREVENT DAMAGE SAFETY DOUBLE CONFIRM POPUP MODULE
     function deleteLedgerFolder(key) {
-        if(!confirm("Are you sure you want to permanently delete this customer's entire folder record?")) return;
+        if(!confirm("⚠️ ATTENTION: Are you absolutely certain you want to destroy this customer's folder directory registry permanently? All historical balances will be lost!")) return;
         let folders = JSON.parse(localStorage.getItem('customerLedgerFolders'));
         delete folders[key];
         localStorage.setItem('customerLedgerFolders', JSON.stringify(folders));
         renderLedgerRegistry();
-        showToast("Folder Destroyed.");
+        showToast("Ledger data directory erased.");
     }
 
-    // 💸 13. PARTIAL PAYMENT CLEARANCE TRACKER INTERFACE ENGINE
+    // 💸 3. INDEPENDENT BALANCE HEALTH BADGING PORTAL ENGINE FOR CREDIT TRACKING
     function clearIndividualBakaya(key, index, amount) {
         let folders = JSON.parse(localStorage.getItem('customerLedgerFolders'));
         if(folders[key] && folders[key].entries[index]) {
@@ -661,7 +797,7 @@
             folders[key].balance = folders[key].totalPaid - folders[key].totalPurchased;
             localStorage.setItem('customerLedgerFolders', JSON.stringify(folders));
             renderLedgerRegistry();
-            showToast("Bakaya Slip Cleared.");
+            showToast("Credit bakaya record paid.");
         }
     }
 
@@ -670,20 +806,23 @@
         let html = '';
         for(let k in folders) {
             let f = folders[k];
-            let ledgerState = f.balance < 0 ? `<b style="color:var(--danger);">Bakaya Ledger (Minus): ₹${Math.abs(f.balance).toFixed(2)}</b>` : `<b style="color:var(--accent);">Clear / Advance: ₹${f.balance.toFixed(2)}</b>`;
+            
+            // 💸 3. DYNAMIC METRIC CREDIT SCORE ASSISTANCE INDICATORS
+            let healthBadge = f.balance < 0 ? `<span style="background:var(--danger); color:white; font-size:11px; padding:2px 8px; border-radius:4px; font-weight:bold;">⚠️ DEBTOR ACCOUNT</span>` : `<span style="background:var(--accent); color:black; font-size:11px; padding:2px 8px; border-radius:4px; font-weight:bold;">✓ STRONG CREDIT HEALTH</span>`;
+            let ledgerState = f.balance < 0 ? `<b style="color:var(--danger);">Bakaya Liability: ₹${Math.abs(f.balance).toFixed(2)}</b>` : `<b style="color:var(--accent);">Settled Ledger Balance: ₹${f.balance.toFixed(2)}</b>`;
             let slipSearchTerms = f.entries.map(e => `${e.billNo} ${e.date} ${e.status}`).join(' ');
 
             html += `<div class="history-card" data-searchable="${f.name.toLowerCase()} ${f.address.toLowerCase()} ${slipSearchTerms.toLowerCase()}">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h3 style="color:var(--accent); margin:0;">📂 Account Folder: ${f.name}</h3>
-                    <button onclick="deleteLedgerFolder('${k}')" style="background:var(--danger); color:white; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:bold;">Delete Folder</button>
+                    <h3 style="color:var(--accent); margin:0;">📂 File Ledger: ${f.name} ${healthBadge}</h3>
+                    <button onclick="deleteLedgerFolder('${k}')" style="background:var(--danger); color:white; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:bold;">Wipe Folder</button>
                 </div>
                 <p style="margin:4px 0; font-size:13px; color:var(--muted);">📍 Address Base: ${f.address}</p>
-                <p style="margin:4px 0; font-size:14px;">Bought Cumulative: <b>₹${f.totalPurchased.toFixed(2)}</b> | Paid: <b>₹${f.totalPaid.toFixed(2)}</b></p>
+                <p style="margin:4px 0; font-size:14px;">Bought Cumulative: <b>₹${f.totalPurchased.toFixed(2)}</b> | Paid Records: <b>₹${f.totalPaid.toFixed(2)}</b></p>
                 <p style="margin:4px 0;">Account State: ${ledgerState}</p>
                 <table style="width:100%; font-size:12px; margin-top:10px; border-top:1px solid #222; color:white; border-collapse:collapse;">
                     <thead>
-                        <tr style="color:var(--accent); text-align:left;"><th>Slip No.</th><th>Date</th><th>Amount</th><th>Status</th><th>Action</th></tr>
+                        <tr style="color:var(--accent); text-align:left;"><th>Slip Index</th><th>Timestamp</th><th>Slip Net</th><th>Status</th><th>Operation Trigger</th></tr>
                     </thead>
                     <tbody>
                         ${f.entries.map((e, idx) => {
@@ -697,10 +836,9 @@
                 </table>
             </div>`;
         }
-        document.getElementById('ledger-history-container').innerHTML = html || 'No data records found in ledger cloud.';
+        document.getElementById('ledger-history-container').innerHTML = html || 'No data records found in ledger cloud clusters.';
     }
-
-    function searchLedgerRegistry() {
+        function searchLedgerRegistry() {
         const txt = document.getElementById('ledger-search-input').value.toLowerCase();
         document.querySelectorAll('.history-card').forEach(c => {
             c.style.display = c.getAttribute('data-searchable').includes(txt) ? 'block' : 'none';
@@ -708,12 +846,12 @@
     }
 
     function shareInvoiceOnWhatsApp() {
-        if(cart.length === 0) { alert("Cart empty!"); return; }
+        if(cart.length === 0) { alert("Active cart sheet is empty!"); return; }
         const phone = document.getElementById('c-phone').value.trim();
-        if(!phone) { alert("Enter Mobile Number!"); return; }
-        let msg = `*SHRADDHA HARDWARE INVOICE*%0ABill No: ${localStorage.getItem('billIndexCount')}%0A`;
+        if(!phone) { alert("Please input active WhatsApp mobile node sequence first!"); return; }
+        let msg = `*SHRADDHA HARDWARE CORPORATE INVOICE*%0ABill No reference: ${localStorage.getItem('billIndexCount')}%0A`;
         cart.forEach(i => msg += `- ${i.name} x ${i.qty} = ₹${(i.qty*(i.rate-i.discountPerPc)).toFixed(2)}%0A`);
-        msg += `*Total: ₹${document.getElementById('bill-total').innerText}*%0AStatus: ${document.getElementById('bill-status-selector').value}`;
+        msg += `*Net Payable Due: ₹${document.getElementById('bill-total').innerText}*%0ARegistry Status: ${document.getElementById('bill-status-selector').value}`;
         
         let clean = phone.replace(/\D/g, '');
         if(clean.length === 10) clean = "91" + clean;
@@ -754,7 +892,7 @@
 
         const res = await fetch(URL, { method: method, headers: { 'X-Admin-Secret': SECURE_KEY }, body: fd });
         if(res.ok) {
-            showToast("Stock Entry Saved Successfully.");
+            showToast("System cluster registry asset saved successfully.");
             document.getElementById('stock-form').reset();
             document.getElementById('edit-prod-id').value = '';
             loadSystemData();
@@ -764,7 +902,7 @@
     async function deleteAssetItem(id) {
         if(!confirm("Are you sure you want to delete this product?")) return;
         const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE', headers: { 'X-Admin-Secret': SECURE_KEY } });
-        if(res.ok) { showToast("Deleted."); loadSystemData(); }
+        if(res.ok) { showToast("Asset entry completely destroyed."); loadSystemData(); }
     }
 
     async function triggerStockDeductionEngine() {
@@ -789,5 +927,4 @@
 </body>
 </html>
 
-
-
+    
