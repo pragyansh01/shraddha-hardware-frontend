@@ -350,3 +350,43 @@ V<!DOCTYPE html>
 
     function exportBillToExcel() {
         const data = cart.map(i => ({ Item_Particulars: i.name, Quantity: i.qty, Unit_Rate: i.rate, Total: (i.qty * i.rate) }))
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Report");
+        XLSX.writeFile(wb, `Log-${Date.now()}.xlsx`);
+        showToast("Excel Ledger Stream Downloaded.");
+    }
+
+    async function triggerStockDeductionEngine() {
+        const status = document.getElementById('bill-status').value;
+        if(status !== 'Sold') return;
+
+        for(let item of cart) {
+            const prod = allProducts.find(p => p.id == item.id);
+            if(prod) {
+                const currentStock = parseInt(prod.stockInfo || 0);
+                const updatedStock = currentStock - item.qty;
+                
+                const fd = new FormData();
+                fd.append('name', prod.name);
+                fd.append('buyPrice', prod.buyPrice);
+                fd.append('sellPrice', prod.sellPrice);
+                fd.append('stockInfo', updatedStock);
+
+                await fetch(`${API_URL}/${prod.id}`, {
+                    method: 'PUT',
+                    headers: { 'X-Admin-Secret': systemAdminKey },
+                    body: fd
+                });
+            }
+        }
+        showToast("Database Stock Adjusted Automatically.");
+        loadSystemData();
+        cart = [];
+        updateBillUI();
+    }
+
+    window.onload = loadSystemData;
+</script>
+</body>
+</html>
