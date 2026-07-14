@@ -5,83 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shraddha Hardware Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <!-- html2canvas Library to capture real photos of the bill -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-            --bg: #060a06;
-            --card: rgba(20, 35, 20, 0.6);
-            --accent: #22c55e;
-            --accent-glow: rgba(34, 197, 94, 0.2);
-            --text: #e2e8f0;
-            --muted: #8c9ba5;
-            --danger: #ef4444;
-            --warning: #eab308;
-            --info: #3b82f6;
-            --glass-border: rgba(34, 197, 94, 0.15);
+            --bg: #060a06; --card: rgba(20, 35, 20, 0.6); --accent: #22c55e; --accent-glow: rgba(34, 197, 94, 0.2);
+            --text: #e2e8f0; --muted: #8c9ba5; --danger: #ef4444; --warning: #eab308; --glass-border: rgba(34, 197, 94, 0.15);
         }
         body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; overflow-x: hidden; }
-        
-        .navbar { display: flex; justify-content: space-between; align-items: center; background: rgba(10, 18, 10, 0.8); backdrop-filter: blur(14px); padding: 15px 40px; border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 100; }
-        .nav-links { display: flex; gap: 10px; }
-        .nav-links button { background: none; border: none; color: var(--muted); font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.3s; padding: 8px 16px; border-radius: 20px; }
-        .nav-links button.active, .nav-links button:hover { color: #fff; background: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
-        .lang-btn { background: linear-gradient(135deg, #22c55e, #15803d); color: white; border: none; padding: 6px 16px; font-weight: bold; border-radius: 20px; cursor: pointer; }
-
+        .navbar { display: flex; justify-content: space-between; align-items: center; background: rgba(10, 18, 10, 0.8); backdrop-filter: blur(14px); padding: 15px 30px; border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 10px; }
+        .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
+        .nav-links button { background: none; border: none; color: var(--muted); font-size: 13px; font-weight: 500; cursor: pointer; padding: 8px 14px; border-radius: 20px; transition: 0.3s; }
+        .nav-links button.active, .nav-links button:hover { color: #fff; background: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+        .lang-btn { background: linear-gradient(135deg, #22c55e, #15803d); color: white; border: none; padding: 6px 14px; font-weight: bold; border-radius: 20px; cursor: pointer; font-size: 12px; }
         #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
-        .toast { background: #142314; color: #fff; padding: 14px 24px; border-radius: 8px; border-left: 4px solid var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-weight: 600; font-size: 14px; margin-bottom: 10px; transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .toast.show { transform: translateX(0); }
-
-        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
-        .page-section { display: none; animation: fadeIn 0.4s ease-in-out forwards; }
+        .toast { background: #142314; color: #fff; padding: 12px 20px; border-radius: 8px; border-left: 4px solid var(--accent); font-weight: 600; font-size: 13px; margin-bottom: 10px; }
+        .container { max-width: 1100px; margin: 30px auto; padding: 0 15px; }
+        .page-section { display: none; animation: fadeIn 0.4s ease forwards; }
         .page-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .dash-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
-        .dash-card { background: var(--card); border: 1px solid var(--glass-border); padding: 15px 20px; border-radius: 12px; text-align: center; }
-        .dash-card h4 { margin: 0; font-size: 13px; color: var(--muted); }
-        .dash-card p { margin: 5px 0 0 0; font-size: 22px; font-weight: bold; color: var(--accent); }
-
-        input, select { width: 100%; padding: 14px; margin-bottom: 18px; border: 1px solid var(--glass-border); background: #0b110b; color: white; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--glass-border); background: #0b110b; color: white; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
         input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 10px var(--accent-glow); }
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-size: 13px; color: var(--accent); margin-bottom: 6px; font-weight: 600; letter-spacing: 0.5px; }
-        
-        .action-btn { width: 100%; padding: 14px; border: none; background: linear-gradient(135deg, #22c55e, #16a34a); color: white; font-weight: bold; font-size: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px var(--accent-glow); margin-bottom: 10px; }
-        .action-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px var(--accent-glow); }
-
-        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
-        .prod-card { background: var(--card); border: 1px solid var(--glass-border); border-radius: 14px; padding: 20px; transition: 0.3s; text-align: center; backdrop-filter: blur(4px); position: relative; }
-        .prod-card img { width: 100%; height: 170px; object-fit: cover; border-radius: 10px; background: #070c07; }
-        
-        .alert-badge { position: absolute; top: 10px; right: 10px; background: var(--danger); color: white; font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 10px; }
-
-        .log-item { background: var(--card); border: 1px solid var(--glass-border); padding: 15px 20px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .control-btns button { padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-left: 5px; border: none; }
+        .action-btn { width: 100%; padding: 12px; border: none; background: linear-gradient(135deg, #22c55e, #16a34a); color: white; font-weight: bold; font-size: 14px; border-radius: 8px; cursor: pointer; margin-bottom: 10px; transition: 0.2s; }
+        .action-btn:hover { transform: translateY(-1px); }
+        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .prod-card { background: var(--card); border: 1px solid var(--glass-border); border-radius: 12px; padding: 15px; text-align: center; position: relative; }
+        .prod-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; background: #070c07; margin-bottom: 10px; }
+        .log-item { background: var(--card); border: 1px solid var(--glass-border); padding: 12px 18px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .control-btns button { padding: 5px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-left: 5px; border: none; font-size: 12px; }
         .edit-btn { background: #eab308; color: black; }
         .delete-btn { background: #ef4444; color: white; }
-
-        /* Custom Ledger & Folder Styles */
-        .history-card { background: var(--card); border: 1px solid var(--glass-border); padding: 20px; border-radius: 12px; margin-bottom: 15px; }
-        .status-pill { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; }
-        .status-paid { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
-        .status-unpaid { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
-        .status-withheld { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
-        .status-cancelled { background: rgba(234, 179, 8, 0.2); color: #eab308; }
-
-        .bill-book-container { background: #e6f4ea; color: #0b2512; padding: 40px; border: 2px solid #155b27; font-family: 'Courier New', monospace; position: relative; border-radius: 6px; }
-        .bill-watermark { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%) rotate(-25deg); font-size: 45px; color: rgba(21, 91, 39, 0.06); font-weight: 900; pointer-events: none; white-space: nowrap; text-align: center; letter-spacing: 2px; }
-        .bill-header { text-align: center; border-bottom: 2px dashed #155b27; padding-bottom: 12px; }
-        .bill-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; border-bottom: 1px solid #155b27; padding-bottom: 12px; font-size: 13px; }
-        .bill-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
-        .bill-table th, .bill-table td { border: 1px solid #155b27; padding: 8px 10px; text-align: left; }
-        .bill-table th { background: rgba(34, 197, 94, 0.12); }
-        .total-section { text-align: right; margin-top: 20px; font-weight: bold; font-size: 14px; border-top: 1px solid #155b27; padding-top: 10px; }
-
-        #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(8px); }
-        .auth-box { background: #121a12; padding: 35px; border-radius: 16px; border: 2px solid var(--accent); width: 340px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        
-        footer { margin-top: 80px; padding: 25px; border-top: 1px solid var(--glass-border); text-align: center; color: var(--muted); font-size: 13px; }
+        .history-card { background: var(--card); border: 1px solid var(--glass-border); padding: 18px; border-radius: 12px; margin-bottom: 15px; }
+        .bill-book-container { background: #e6f4ea; color: #0b2512; padding: 30px; border: 2px solid #155b27; font-family: monospace; position: relative; border-radius: 6px; margin-top: 15px; }
+        .bill-header { text-align: center; border-bottom: 2px dashed #155b27; padding-bottom: 10px; }
+        .bill-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; border-bottom: 1px solid #155b27; padding-bottom: 10px; font-size: 13px; }
+        .bill-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+        .bill-table th, .bill-table td { border: 1px solid #155b27; padding: 6px 8px; text-align: left; }
+        #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(5px); }
+        .auth-box { background: #121a12; padding: 30px; border-radius: 16px; border: 2px solid var(--accent); width: 320px; text-align: center; }
     </style>
 </head>
 <body>
@@ -90,316 +50,190 @@
 
     <div id="auth-overlay">
         <div class="auth-box">
-            <h3 style="color:var(--accent); margin-top: 0; font-size: 20px;" id="lbl-popup-title">🔐 Enter System Password</h3>
-            <p style="color:var(--muted); font-size: 13px; margin-bottom: 20px;" id="lbl-popup-desc">Restricted panel. Please enter your password to open.</p>
+            <h3 style="color:var(--accent); margin-top:0;">🔐 Password Verified Area</h3>
             <input type="password" id="pass-input" placeholder="Password..." style="text-align: center;">
-            <button class="action-btn" style="margin-bottom: 10px;" onclick="verifyGateLogin()" id="btn-popup-login">Unlock</button>
-            <button class="action-btn" style="background:transparent; border: 1px solid #333; color:var(--text);" onclick="closeGateOverlay()" id="btn-popup-cancel">Cancel</button>
+            <button class="action-btn" onclick="verifyGateLogin()">Unlock Desks</button>
+            <button class="action-btn" style="background:transparent; border:1px solid #333; color:var(--text);" onclick="closeGateOverlay()">Cancel</button>
         </div>
     </div>
 
     <nav class="navbar">
         <div class="nav-links">
             <button id="nav-home" class="active" onclick="switchPage('home')">🛒 Showcase</button>
-            <button id="nav-contact" onclick="switchPage('contact')">📞 Reach Desk</button>
             <button id="nav-private" onclick="switchPage('private')">🔐 Personal View</button>
             <button id="nav-admin" onclick="switchPage('admin')">📦 Warehouse Log</button>
             <button id="nav-billing" onclick="switchPage('billing')">🧾 Billing Counter</button>
             <button id="nav-history" onclick="switchPage('history')">📂 Khata Ledger</button>
-            <button id="logout-btn" style="display:none; color:var(--danger); border: 1px solid var(--danger);" onclick="triggerLogout()">Logout</button>
+            <button id="logout-btn" style="display:none; color:var(--danger);" onclick="triggerLogout()">Logout</button>
         </div>
         <button class="lang-btn" onclick="toggleLanguage()">🌐 EN / HI</button>
     </nav>
 
     <div class="container">
-        
-        <div class="dash-row" id="global-dash-summary" style="display:none;">
-            <div class="dash-card">
-                <h4 id="lbl-dash-total">Total Stock Items</h4>
-                <p id="dash-val-total">0</p>
-            </div>
-            <div class="dash-card">
-                <h4 id="lbl-dash-value">Total Asset Worth (Buy)</h4>
-                <p id="dash-val-worth">₹0.00</p>
-            </div>
-            <div class="dash-card" style="border-color: var(--danger);">
-                <h4 style="color:var(--danger);" id="lbl-dash-alert">Low Stock Items</h4>
-                <p id="dash-val-low" style="color:var(--danger);">0</p>
-            </div>
-        </div>
-
-        <!-- PUBLIC SHOWCASE -->
+        <!-- SHOWCASE -->
         <section id="page-home" class="page-section active">
-            <h2 id="lbl-showcase-title" style="color:var(--accent); margin-top:0;">Product Showcase</h2>
-            <input type="text" id="search-bar" placeholder="🔍 Search items...">
+            <h2 style="color:var(--accent); margin-top:0;" id="lbl-showcase-title">Product Showcase</h2>
+            <input type="text" id="search-bar" placeholder="🔍 Search items..." oninput="filterCustomerCatalog()">
             <div class="catalog-grid" id="customer-catalog"></div>
         </section>
 
-        <!-- SECURE PERSONAL VIEW -->
+        <!-- PERSONAL VIEW -->
         <section id="page-private" class="page-section">
-            <h2 style="color:var(--accent); margin-top:0;" id="lbl-private-title">🔐 Personal Showcase (Buying Prices)</h2>
-            <input type="text" id="search-private" placeholder="🔍 Search items...">
+            <h2 style="color:var(--accent); margin-top:0;">🔐 Private Asset Margin View</h2>
             <div class="catalog-grid" id="private-catalog"></div>
         </section>
 
-        <!-- SECURE WAREHOUSE LOGS -->
+        <!-- WAREHOUSE LOG -->
         <section id="page-admin" class="page-section">
-            <h2 id="admin-title" style="color:var(--accent); margin-top:0;">📦 Warehouse Logs</h2>
-            <div class="card" style="background:var(--card); border:1px solid var(--glass-border); padding:25px; border-radius:12px; margin-bottom:25px;">
-                <h3 id="form-action-title" style="margin-top:0; color:var(--accent);">Add New Item</h3>
+            <h2 style="color:var(--accent); margin-top:0;">📦 Warehouse Stock Registry</h2>
+            <div style="background:var(--card); padding:20px; border-radius:12px; margin-bottom:20px; border:1px solid var(--glass-border);">
                 <form id="stock-form">
                     <input type="hidden" id="edit-prod-id">
                     <input type="text" id="prod-name" placeholder="Item Name (English)" required>
                     <input type="text" id="prod-name-hi" placeholder="सामान का नाम (Hindi)">
-                    <input type="text" id="prod-desc" placeholder="Item Description (English)">
-                    <input type="text" id="prod-desc-hi" placeholder="सामान का विवरण (Hindi)">
-                    
-                    <div class="input-group">
-                        <label style="display:block; font-size:13px; color:var(--accent); margin-bottom:6px;" id="lbl-form-unit">Measurement Unit (इकाई)</label>
-                        <select id="prod-unit">
-                            <option value="Pcs">Pieces (Pcs)</option>
-                            <option value="Litre">Litre (Ltr)</option>
-                            <option value="Kg">Kilogram (Kg)</option>
-                            <option value="Meter">Meter (Mtr)</option>
-                            <option value="Packet">Packet (Pkt)</option>
-                            <option value="Box">Box</option>
-                        </select>
-                    </div>
-
-                    <input type="number" id="prod-buy" placeholder="Buying Price (₹)" step="0.01" required>
+                    <select id="prod-unit">
+                        <option value="Pcs">Pieces (Pcs)</option>
+                        <option value="Litre">Litre (Ltr)</option>
+                        <option value="Kg">Kilogram (Kg)</option>
+                        <option value="Meter">Meter (Mtr)</option>
+                    </select>
+                    <input type="number" id="prod-buy" placeholder="Buying Cost Price (₹)" step="0.01" required>
                     <input type="number" id="prod-sell" placeholder="Selling Price / MRP (₹)" step="0.01" required>
-                    <input type="number" id="prod-qty" placeholder="Stock Quantity" required>
-                    <input type="file" id="prod-img" accept="image/*">
-                    <button type="submit" id="submit-form-btn" class="action-btn">Save Item</button>
+                    <input type="number" id="prod-qty" placeholder="Initial Quantity Count" required>
+                    <button type="submit" id="submit-form-btn" class="action-btn">Commit Stock Entry</button>
                 </form>
             </div>
-            
-            <h3 style="color:var(--accent);" id="lbl-active-inv">All Stocks List</h3>
             <input type="text" id="search-logs" placeholder="🔍 Search stocks to Edit or Delete..." oninput="filterAdminLogs()">
             <div id="log-list"></div>
         </section>
 
-        <!-- SECURE BILLING ENGINE -->
+        <!-- BILLING DESK -->
         <section id="page-billing" class="page-section">
-            <h2 style="color:var(--accent); margin-top:0;" id="lbl-invoice-title">🧾 Billing Counter</h2>
-            <div style="background:var(--card); padding:25px; border-radius:12px; margin-bottom:25px; display:grid; grid-template-columns:1fr 1fr; gap:25px;">
+            <h2 style="color:var(--accent); margin-top:0;">🧾 Live Invoice Desk</h2>
+            <div style="background:var(--card); padding:20px; border-radius:12px; margin-bottom:20px; display:grid; grid-template-columns:1fr 1fr; gap:20px;">
                 <div>
-                    <div class="input-group">
-                        <label id="lbl-cname">Customer Name</label>
-                        <input type="text" id="c-name" placeholder="Enter Name" oninput="updateBillUI()">
-                    </div>
-                    <div class="input-group">
-                        <label id="lbl-cphone">Customer Phone Number</label>
-                        <input type="text" id="c-phone" placeholder="Enter Mobile Number" oninput="updateBillUI()">
-                    </div>
-                    <div class="input-group">
-                        <label id="lbl-caddr">Customer Address</label>
-                        <input type="text" id="c-addr" placeholder="Enter Address" oninput="updateBillUI()">
-                    </div>
+                    <input type="text" id="c-name" placeholder="Customer Name" oninput="updateBillUI()">
+                    <input type="text" id="c-phone" placeholder="Phone Number" oninput="updateBillUI()">
+                    <input type="text" id="c-addr" placeholder="Address" oninput="updateBillUI()">
                 </div>
                 <div>
-                    <div class="input-group">
-                        <label id="lbl-filter">Search Item</label>
-                        <input type="text" id="search-dropdown-item" placeholder="🔍 Type item name..." oninput="filterSelectorItems()">
-                    </div>
-                    <div class="input-group">
-                        <label id="lbl-select">Select Item</label>
-                        <select id="item-selector"></select>
-                    </div>
+                    <input type="text" id="search-dropdown-item" placeholder="🔍 Quick Filter Items..." oninput="filterSelectorItems()">
+                    <select id="item-selector"></select>
                     <div style="display:flex; gap:10px;">
-                        <div class="input-group" style="width: 50%;">
-                            <label id="lbl-qty">Quantity</label>
-                            <input type="number" id="item-qty" value="1" step="0.01">
-                        </div>
-                        <div class="input-group" style="width: 50%;">
-                            <label id="lbl-discount">Discount Per Piece (₹)</label>
-                            <input type="number" id="item-discount" value="0">
-                        </div>
+                        <input type="number" id="item-qty" value="1" step="0.01" placeholder="Quantity">
+                        <input type="number" id="item-discount" value="0" placeholder="Disc / Piece (₹)">
                     </div>
-                    <button class="action-btn" style="height:48px; margin-top: 6px;" onclick="addItemToCart()" id="btn-add-item">Add Item To Cart</button>
+                    <button class="action-btn" onclick="addItemToCart()">Add Item To Cart</button>
                 </div>
             </div>
 
-            <!-- Live Settlement Control Box -->
-            <div style="background:var(--card); padding:25px; border-radius:12px; margin-bottom:25px;">
-                <div class="input-group">
-                    <label style="color:var(--warning);" id="lbl-status-select">Select Invoice Deal Status (बिल की स्थिति चुनें)</label>
-                    <select id="bill-status-selector">
-                        <option value="Paid">Paid (पक्का भुगतान)</option>
-                        <option value="Unpaid">Unpaid / Bakaya (उधार खाता)</option>
-                        <option value="Withheld">Withheld (रोका हुआ)</option>
-                        <option value="Cancelled">Cancelled (रद्द करें)</option>
-                    </select>
-                </div>
-            </div>
+            <select id="bill-status-selector" onchange="updateBillUI()">
+                <option value="Paid">Paid (पक्का भुगतान)</option>
+                <option value="Unpaid">Unpaid / Bakaya (उधार खाता)</option>
+                <option value="Withheld">Withheld (रोका हुआ)</option>
+                <option value="Cancelled">Cancelled (रद्द)</option>
+            </select>
 
-            <!-- Greenish Tax Receipt Format -->
             <div class="bill-book-container" id="printable-bill">
                 <div class="bill-watermark">SHRADDHA HARDWARE</div>
                 <div class="bill-header">
-                    <h2 style="margin:5px 0; font-weight:900; letter-spacing:1px; color:#113a1a;">TAX INVOICE</h2>
-                    <h1 style="margin:5px 0; font-size:26px; font-weight:900; color:#155b27;">SHRADDHA HARDWARE</h1>
-                    <p style="margin:3px 0; font-weight:bold;">Mahuli, Ratanpur, Jaunpur</p>
-                    <p style="margin:3px 0; font-weight:bold;">Hotline: +91 87561 48281</p>
+                    <h2 style="margin:5px 0;">TAX INVOICE</h2>
+                    <h1 style="margin:5px 0; font-size:24px; color:#155b27;">SHRADDHA HARDWARE</h1>
+                    <p style="margin:2px 0;">Mahuli, Ratanpur, Jaunpur | Hotline: +91 87561 48281</p>
                 </div>
                 <div class="bill-details-grid">
                     <div>
-                        <p><b>Customer Details:</b></p>
-                        <p>Name: <span id="lbl-name">.................</span></p>
-                        <p>Phone: <span id="lbl-phone">.................</span></p>
-                        <p>Address: <span id="lbl-addr">.................</span></p>
+                        <p>Customer: <span id="lbl-name" style="font-weight:bold;">....</span></p>
+                        <p>Phone: <span id="lbl-phone">....</span></p>
+                        <p>Address: <span id="lbl-addr">....</span></p>
                     </div>
                     <div style="text-align: right;">
-                        <p style="margin-bottom:18px;"></p>
-                        <p><b>Billing Number:</b> <span id="lbl-bill-count" style="font-weight:900; color:#155b27;">1</span></p>
-                        <p><b>Date/Time:</b> <span id="lbl-date"></span></p>
+                        <p>Bill No: <span id="lbl-bill-count" style="font-weight:bold; color:#155b27;">1</span></p>
+                        <p>Date: <span id="lbl-date"></span></p>
                     </div>
                 </div>
                 <table class="bill-table">
                     <thead>
                         <tr>
-                            <th>Sl. No.</th>
-                            <th>Particulars</th>
-                            <th>Qty</th>
-                            <th>Rate (MRP)</th>
-                            <th>Disc/Pc</th>
-                            <th>Net Amount</th>
-                            <th class="no-print">Action</th>
+                            <th>Sl No.</th><th>Particulars</th><th>Qty</th><th>Rate</th><th>Disc/Pc</th><th>Net Amount</th><th class="no-print">Action</th>
                         </tr>
                     </thead>
                     <tbody id="bill-items-body"></tbody>
                 </table>
-                <div class="total-section">
-                    <p style="font-size:16px; margin: 5px 0; color:#113a1a;">Grand Total Payable: ₹<span id="bill-total">0.00</span></p>
-                    <p style="font-size:12px; margin: 5px 0; color:#851414; font-weight:bold;">Deal Type Status: <span id="lbl-bill-status-view">Paid</span></p>
+                <div style="text-align: right; margin-top:20px; font-weight:bold; border-top:1px dashed #155b27; padding-top:10px;">
+                    <p style="font-size:16px;">Grand Total: ₹<span id="bill-total">0.00</span></p>
+                    <p>Deal Status: <span id="lbl-bill-status-view" style="color:#155b27;">Paid</span></p>
                 </div>
-                <p style="margin-top:40px; font-size:11px; text-align:center; font-weight:bold; border-top:1px dashed #155b27; padding-top:15px; color:#155b27;">Thank You for Shopping. System Generated Invoice Token.</p>
             </div>
-            
-            <div style="margin-top:25px; display:flex; gap:15px;">
-                <button class="action-btn" onclick="saveAndCaptureInvoice()" id="btn-print-pdf">Save & Download Bill Photo</button>
-                <button class="action-btn" style="background:linear-gradient(135deg, #075e54, #128c7e);" onclick="shareInvoiceOnWhatsApp()" id="btn-share-wa">Share Invoice Text Link</button>
-            </div>
+            <br>
+            <button class="action-btn" onclick="saveAndCaptureInvoice()">Save & Download Bill Photo</button>
+            <button class="action-btn" style="background:linear-gradient(135deg, #075e54, #128c7e);" onclick="shareInvoiceOnWhatsApp()">Share Summary Text on WhatsApp</button>
         </section>
 
-        <!-- SECURE HISTORY & KHATA LEDGER DESK -->
+        <!-- KHATA LEDGER -->
         <section id="page-history" class="page-section">
-            <h2 style="color:var(--accent); margin-top:0;">📂 Khata Ledger & Bill History Search</h2>
+            <h2 style="color:var(--accent); margin-top:0;">📂 Khata Ledger Engine</h2>
+            <input type="text" id="ledger-search-input" placeholder="🔍 Search Folders by Name or Address..." oninput="searchLedgerRegistry()">
             
-            <div style="background:var(--card); padding:20px; border-radius:12px; margin-bottom:25px;">
-                <h4>🔍 Universal Search Engine</h4>
-                <input type="text" id="ledger-search-input"  placeholder="Search by Bill Number, Name, Date or Location Address..." oninput="searchLedgerRegistry()">
-            </div>
-
-            <!-- Payment Collection Box for Random Payments -->
-            <div style="background:var(--card); padding:20px; border-radius:12px; margin-bottom:25px; border: 1px solid var(--warning);">
-                <h4 style="color:var(--warning); margin-top:0;">💵 Random Payment Deposit (बीच में पैसा जमा करना)</h4>
-                <div style="display:flex; gap:15px;">
-                    <input type="text" id="pay-cname" placeholder="Exact Customer Name">
-                    <input type="text" id="pay-caddr" placeholder="Customer Address">
-                    <input type="number" id="pay-amount" placeholder="Amount Paid (₹)">
-                    <button class="action-btn" style="width:250px; background:var(--warning); color:black; margin-bottom:0;" onclick="submitRandomPayment()">Deposit Money</button>
+            <div style="background:var(--card); padding:20px; border-radius:12px; margin-bottom:20px; border:1px solid var(--warning);">
+                <h4 style="color:var(--warning); margin-top:0;">💵 Random Payment Deposit Entry (बीच में पैसा जमा करना)</h4>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+                    <input type="text" id="pay-cname" placeholder="Customer Name">
+                    <input type="text" id="pay-caddr" placeholder="Address Entry">
+                    <input type="number" id="pay-amount" placeholder="Amount Recieved (₹)">
                 </div>
+                <button class="action-btn" style="background:var(--warning); color:black; margin-top:10px;" onclick="submitRandomPayment()">Deposit Cash Asset</button>
             </div>
-
             <div id="ledger-history-container"></div>
         </section>
-
-        <!-- STORE PROFILE CONTACT DESK -->
-        <section id="page-contact" class="page-section">
-            <h2 id="contact-title" style="color:var(--accent); margin-top:0;">🏢 Store Profile</h2>
-            <div style="background:var(--card); padding:35px; border-radius:14px; border:1px solid var(--glass-border); line-height:1.6;">
-                <h3>Shraddha Hardware</h3>
-                <p>📍 <b>Location:</b> Mahuli, Ratanpur, Jaunpur</p>
-                <p>📞 <b>Hotline:</b> +91 87561 48281</p>
-                <p>✉️ <b>Email:</b> Abhisheshkumarsingh1@gmail.com</p>
-                <hr style="border:0; border-top:1px solid var(--glass-border); margin:20px 0;">
-                <h4 id="lbl-mgmt-title">Management Details:</h4>
-                <p>👑 <b>Owner:</b> Chandrabhan Singh</p>
-                <p>📱 <b>Contact Node:</b> +91 73798 84977</p>
-            </div>
-        </section>
-
-        <footer>
-            <p>© 2026 Shraddha Hardware Corporation System Matrix</p>
-        </footer>
     </div>
 
 <script>
     const API_URL = 'https://shraddha-hardware-backend-1.onrender.com/api/products';
     const SECURE_KEY = 'Shraddha832024';
-    let allProducts = [];
-    let cart = [];
-    let currentLang = 'en';
-    let targetPendingPage = '';
+    let allProducts = [], cart = [], currentLang = 'en', targetPendingPage = '';
 
-    // Local DB structures for Ledger Folder view
-    if(!localStorage.getItem('globalInvoicesRegistry')) localStorage.setItem('globalInvoicesRegistry', JSON.stringify([]));
     if(!localStorage.getItem('customerLedgerFolders')) localStorage.setItem('customerLedgerFolders', JSON.stringify({}));
     if(!localStorage.getItem('billIndexCount')) localStorage.setItem('billIndexCount', '1');
 
-    function showToast(message) {
+    function showToast(m) {
         const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.innerText = message;
-        container.appendChild(toast);
-        setTimeout(() => toast.classList.add('show'), 100);
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 400);
-        }, 3000);
+        container.innerHTML = `<div class="toast">${m}</div>`;
+        setTimeout(() => container.innerHTML = '', 3000);
     }
 
-    function checkAuth(targetPage) {
+    function checkAuth(t) {
         if (localStorage.getItem('isSystemAuthorized') === 'true') return true;
-        targetPendingPage = targetPage;
+        targetPendingPage = t;
         document.getElementById('auth-overlay').style.display = 'flex';
         return false;
     }
 
     function verifyGateLogin() {
-        const inputPass = document.getElementById('pass-input').value;
-        if (inputPass === SECURE_KEY) {
+        if (document.getElementById('pass-input').value === SECURE_KEY) {
             localStorage.setItem('isSystemAuthorized', 'true');
             document.getElementById('auth-overlay').style.display = 'none';
-            document.getElementById('pass-input').value = '';
             document.getElementById('logout-btn').style.display = 'block';
-            showToast("Success.");
-            if (targetPendingPage) switchPage(targetPendingPage);
-        } else {
-            alert("Wrong Password!");
-        }
+            switchPage(targetPendingPage);
+        } else { alert("Access Denied!"); }
     }
 
-    function closeGateOverlay() {
-        document.getElementById('auth-overlay').style.display = 'none';
-        document.getElementById('pass-input').value = '';
-        targetPendingPage = '';
-    }
-
-    function triggerLogout() {
-        localStorage.setItem('isSystemAuthorized', 'false');
-        document.getElementById('logout-btn').style.display = 'none';
-        showToast("Logged Out.");
-        switchPage('home');
-    }
+    function closeGateOverlay() { document.getElementById('auth-overlay').style.display = 'none'; }
+    function triggerLogout() { localStorage.setItem('isSystemAuthorized', 'false'); window.location.reload(); }
 
     function switchPage(pageId) {
-        if (pageId === 'private' || pageId === 'admin' || pageId === 'billing' || pageId === 'history') {
-            if (!checkAuth(pageId)) return;
-        }
+        if (pageId !== 'home') { if (!checkAuth(pageId)) return; }
         document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-links button').forEach(el => el.classList.remove('active'));
+        
         document.getElementById(`page-${pageId}`).classList.add('active');
         document.getElementById(`nav-${pageId}`).classList.add('active');
-        
         if(pageId === 'history') renderLedgerRegistry();
     }
 
     function toggleLanguage() {
         currentLang = currentLang === 'en' ? 'hi' : 'en';
-        showToast(currentLang === 'en' ? "Interface: English" : "भाषा: हिंदी");
+        document.getElementById('lbl-showcase-title').innerText = currentLang === 'en' ? "Product Showcase" : "सामान की दुकान (शोकेस)";
         renderCustomerCatalog(allProducts);
     }
 
@@ -412,41 +246,40 @@
             renderAdminLogs(allProducts);
             populateBillingDropdown(allProducts);
             document.getElementById('lbl-bill-count').innerText = localStorage.getItem('billIndexCount');
-            if(localStorage.getItem('isSystemAuthorized') === 'true') {
-                document.getElementById('logout-btn').style.display = 'block';
-            }
-        } catch(e) { console.error("Fetch failed", e); }
+        } catch(e) { showToast("Backend connection waiting..."); }
     }
 
     function renderCustomerCatalog(items) {
-        const grid = document.getElementById('customer-catalog');
         const isHI = currentLang === 'hi';
-        grid.innerHTML = items.map(p => `
+        document.getElementById('customer-catalog').innerHTML = items.map(p => `
             <div class="prod-card">
                 <img src="${p.image ? 'data:image/jpeg;base64,'+p.image : 'https://via.placeholder.com/150'}">
-                <h3 style="margin:12px 0 6px 0; color:var(--accent);">${isHI && p.nameHi ? p.nameHi : p.name}</h3>
-                <p style="font-weight:bold;">₹${p.sellPrice} / ${p.unit || 'Pcs'}</p>
+                <h3 style="color:var(--accent); font-size:15px; margin:5px 0;">${isHI && p.nameHi ? p.nameHi : p.name}</h3>
+                <p style="font-weight:bold; margin:0;">₹${p.sellPrice || 0} / ${p.unit || 'Pcs'}</p>
             </div>
         `).join('');
     }
 
+    function filterCustomerCatalog() {
+        const txt = document.getElementById('search-bar').value.toLowerCase();
+        renderCustomerCatalog(allProducts.filter(p => p.name.toLowerCase().includes(txt) || (p.nameHi && p.nameHi.toLowerCase().includes(txt))));
+    }
+
     function renderPrivateCatalog(items) {
-        const grid = document.getElementById('private-catalog');
-        grid.innerHTML = items.map(p => `
+        document.getElementById('private-catalog').innerHTML = items.map(p => `
             <div class="prod-card" style="border-color:#e11d48;">
-                <h3 style="color:#ef4444;">${p.name}</h3>
-                <p>💰 Buy Cost: ₹${p.buyPrice}</p>
-                <p>🏷️ MRP Sell: ₹${p.sellPrice} / ${p.unit || 'Pcs'}</p>
-                <p>Warehouse Qty: ${p.stockInfo}</p>
+                <h3>${p.name}</h3>
+                <p style="color:#ef4444; margin:3px 0;">Buy Price: ₹${p.buyPrice || 0}</p>
+                <p style="color:var(--accent); margin:3px 0;">MRP Sell: ₹${p.sellPrice || 0} / ${p.unit || 'Pcs'}</p>
+                <small style="color:var(--muted);">In Store: ${p.stockInfo || 0} units</small>
             </div>
         `).join('');
     }
 
     function renderAdminLogs(items) {
-        const list = document.getElementById('log-list');
-        list.innerHTML = items.map(p => `
+        document.getElementById('log-list').innerHTML = items.map(p => `
             <div class="log-item">
-                <div><b>${p.name}</b> <span style="color:var(--muted);">(Sell: ₹${p.sellPrice} / ${p.unit || 'Pcs'})</span></div>
+                <div><b>${p.name}</b> <span style="color:var(--muted);">(${p.stockInfo || 0} Count left)</span></div>
                 <div class="control-btns">
                     <button class="edit-btn" onclick="startEditMode(${JSON.stringify(p).replace(/"/g, '&quot;')})">Edit</button>
                     <button class="delete-btn" onclick="deleteAssetItem(${p.id})">Delete</button>
@@ -461,8 +294,7 @@
     }
 
     function populateBillingDropdown(items) {
-        const select = document.getElementById('item-selector');
-        select.innerHTML = items.map(p => `<option value="${p.id}">${p.name} (₹${p.sellPrice})</option>`).join('');
+        document.getElementById('item-selector').innerHTML = items.map(p => `<option value="${p.id}">${p.name} (₹${p.sellPrice || 0})</option>`).join('');
     }
 
     function filterSelectorItems() {
@@ -472,16 +304,14 @@
 
     function addItemToCart() {
         const id = document.getElementById('item-selector').value;
-        const qty = parseFloat(document.getElementById('item-qty').value) || 1;
-        const discPerPc = parseFloat(document.getElementById('item-discount').value) || 0;
         if(!id) return;
-        
+        const qty = parseFloat(document.getElementById('item-qty').value) || 1;
+        const disc = parseFloat(document.getElementById('item-discount').value) || 0;
         const prod = allProducts.find(p => p.id == id);
         if(!prod) return;
-
-        cart.push({ id: prod.id, name: prod.name, nameHi: prod.nameHi || '', qty: qty, rate: prod.sellPrice, discountPerPc: discPerPc, unit: prod.unit || 'Pcs' });
+        cart.push({ id: prod.id, name: prod.name, nameHi: prod.nameHi || '', qty: qty, rate: prod.sellPrice, discountPerPc: disc, unit: prod.unit || 'Pcs' });
         updateBillUI();
-        showToast("Added.");
+        showToast("Cart updated.");
     }
 
     function removeCartItem(index) {
@@ -490,36 +320,25 @@
     }
 
     function updateBillUI() {
-        document.getElementById('lbl-name').innerText = document.getElementById('c-name').value || ".....................";
-        document.getElementById('lbl-phone').innerText = document.getElementById('c-phone').value || ".....................";
-        document.getElementById('lbl-addr').innerText = document.getElementById('c-addr').value || ".....................";
-        document.getElementById('lbl-date').innerText = new Date().toLocaleString('en-IN');
+        document.getElementById('lbl-name').innerText = document.getElementById('c-name').value || "....";
+        document.getElementById('lbl-phone').innerText = document.getElementById('c-phone').value || "....";
+        document.getElementById('lbl-addr').innerText = document.getElementById('c-addr').value || "....";
+        document.getElementById('lbl-date').innerText = new Date().toLocaleDateString('en-IN');
         
         const status = document.getElementById('bill-status-selector').value;
         document.getElementById('lbl-bill-status-view').innerText = status;
 
-        const tbody = document.getElementById('bill-items-body');
-        let finalPayable = 0;
-        
-        tbody.innerHTML = cart.map((item, index) => {
-            // Per piece discount calculation logic
-            const netAmount = (item.qty * (item.rate - item.discountPerPc));
-            finalPayable += netAmount;
+        let total = 0;
+        document.getElementById('bill-items-body').innerHTML = cart.map((item, index) => {
+            const net = item.qty * (item.rate - item.discountPerPc);
+            total += net;
             return `<tr>
-                <td>${index+1}</td>
-                <td>${item.name}</td>
-                <td>${item.qty} ${item.unit}</td>
-                <td>₹${item.rate}</td>
-                <td>₹${item.discountPerPc}</td>
-                <td>₹${netAmount.toFixed(2)}</td>
-                <td class="no-print"><button onclick="removeCartItem(${index})" style="background:var(--danger); border:none; color:white; padding:4px 8px; border-radius:4px; cursor:pointer;">X</button></td>
+                <td>${index+1}</td><td>${item.name}</td><td>${item.qty} ${item.unit}</td><td>₹${item.rate}</td><td>₹${item.discountPerPc}</td><td>₹${net.toFixed(2)}</td>
+                <td class="no-print"><button onclick="removeCartItem(${index})" style="background:var(--danger); border:none; color:white; padding:2px 6px; border-radius:4px; cursor:pointer;">X</button></td>
             </tr>`;
         }).join('');
-
-        document.getElementById('bill-total').innerText = finalPayable.toFixed(2);
+        document.getElementById('bill-total').innerText = total.toFixed(2);
     }
-
-    document.getElementById('bill-status-selector').addEventListener('change', updateBillUI);
 
     function saveAndCaptureInvoice() {
         if(cart.length === 0) { alert("Cart is empty!"); return; }
@@ -527,58 +346,46 @@
         const caddr = document.getElementById('c-addr').value.trim() || "Local";
         const status = document.getElementById('bill-status-selector').value;
         const total = parseFloat(document.getElementById('bill-total').innerText);
-        
-        if(!cname) { alert("Customer Name is required!"); return; }
+        let count = parseInt(localStorage.getItem('billIndexCount') || 1);
 
-        let currentCount = parseInt(localStorage.getItem('billIndexCount') || 1);
-        
-        // Registry payload
-        const invoiceObj = {
-            billNo: status === 'Cancelled' ? 'CANCELLED' : currentCount,
-            date: new Date().toLocaleDateString('en-IN'),
-            time: new Date().toLocaleTimeString('en-IN'),
-            customer: cname,
-            address: caddr,
-            status: status,
-            totalAmount: total,
-            items: [...cart]
-        };
+        if(!cname) { alert("Customer Name enter karein!"); return; }
 
-        // 1. Save to global list
-        let registry = JSON.parse(localStorage.getItem('globalInvoicesRegistry'));
-        registry.push(invoiceObj);
-        localStorage.setItem('globalInvoicesRegistry', JSON.stringify(registry));
+        const invoice = { billNo: status === 'Cancelled' ? 'CANCELLED' : count, date: new Date().toLocaleDateString('en-IN'), total: total, status: status };
 
-        // 2. Folder assignment
         let folders = JSON.parse(localStorage.getItem('customerLedgerFolders'));
-        const folderKey = `${cname.toLowerCase()}_${caddr.toLowerCase()}`;
-        if(!folders[folderKey]) {
-            folders[folderKey] = { name: cname, address: caddr, totalPurchased: 0, totalPaid: 0, balance: 0, entries: [] };
-        }
+        const key = `${cname.toLowerCase()}_${caddr.toLowerCase()}`;
+        if(!folders[key]) folders[key] = { name: cname, address: caddr, totalPurchased: 0, totalPaid: 0, balance: 0, entries: [] };
         
-        folders[folderKey].entries.push(invoiceObj);
+        folders[key].entries.push(invoice);
         if(status !== 'Cancelled') {
-            folders[folderKey].totalPurchased += total;
-            if(status === 'Paid') folders[folderKey].totalPaid += total;
-            folders[folderKey].balance = folders[folderKey].totalPaid - folders[folderKey].totalPurchased;
+            folders[key].totalPurchased += total;
+            if(status === 'Paid') folders[key].totalPaid += total;
+            folders[key].balance = folders[key].totalPaid - folders[key].totalPurchased;
+            localStorage.setItem('billIndexCount', (count + 1).toString());
         }
         localStorage.setItem('customerLedgerFolders', JSON.stringify(folders));
 
-        // 3. Capture Real Picture (html2canvas) instead of PDF
-        const target = document.getElementById('printable-bill');
-        html2canvas(target, { scale: 2, useCORS: true }).then(canvas => {
+        html2canvas(document.getElementById('printable-bill'), {scale: 2}).then(canvas => {
             const link = document.createElement('a');
-            link.download = `Bill-No-${invoiceObj.billNo}.png`;
-            link.href = canvas.toDataURL('image/png');
+            link.download = `Bill-${invoice.billNo}.png`;
+            link.href = canvas.toDataURL();
             link.click();
-            showToast("Bill Photo Saved Successfully!");
+            showToast("Invoice Photo Saved!");
         });
-
-        if(status !== 'Cancelled') {
-            localStorage.setItem('billIndexCount', (currentCount + 1).toString());
-        }
         
         triggerStockDeductionEngine();
+    }
+
+    function shareInvoiceOnWhatsApp() {
+        if(cart.length === 0) { alert("Cart empty!"); return; }
+        const phone = document.getElementById('c-phone').value.trim();
+        if(!phone) { alert("Enter Phone!"); return; }
+        let msg = `*SHRADDHA HARDWARE INVOICE*%0ABill No: ${localStorage.getItem('billIndexCount')}%0A`;
+        cart.forEach(i => msg += `- ${i.name}: ${i.qty} ${i.unit} = ₹${(i.qty*(i.rate-i.discountPerPc)).toFixed(2)}%0A`);
+        msg += `*Total: ₹${document.getElementById('bill-total').innerText}*%0AStatus: ${document.getElementById('bill-status-selector').value}`;
+        let clean = phone.replace(/\D/g, '');
+        if(clean.length === 10) clean = "91" + clean;
+        window.open(`https://api.whatsapp.com/send?phone=${clean}&text=${msg}`, '_blank');
     }
 
     function submitRandomPayment() {
@@ -586,118 +393,86 @@
         const addr = document.getElementById('pay-caddr').value.trim() || "Local";
         const amt = parseFloat(document.getElementById('pay-amount').value) || 0;
 
-        if(!name || amt <= 0) { alert("Fill all collection nodes properly!"); return; }
-
+        if(!name || amt <= 0) { alert("Inputs accurate daalein!"); return; }
         let folders = JSON.parse(localStorage.getItem('customerLedgerFolders'));
-        const folderKey = `${name.toLowerCase()}_${addr.toLowerCase()}`;
+        const key = `${name.toLowerCase()}_${addr.toLowerCase()}`;
+        if(!folders[key]) folders[key] = { name: name, address: addr, totalPurchased: 0, totalPaid: 0, balance: 0, entries: [] };
 
-        if(!folders[folderKey]) {
-            folders[folderKey] = { name: name, address: addr, totalPurchased: 0, totalPaid: 0, balance: 0, entries: [] };
-        }
-
-        const paymentEntry = {
-            billNo: 'CASH-DEP',
-            date: new Date().toLocaleDateString('en-IN'),
-            time: new Date().toLocaleTimeString('en-IN'),
-            customer: name,
-            address: addr,
-            status: 'Paid',
-            totalAmount: amt,
-            items: [{ name: 'Random Cash Payment Deposit Received', qty: 1, unit: 'Node', rate: amt, discountPerPc: 0 }]
-        };
-
-        folders[folderKey].entries.push(paymentEntry);
-        folders[folderKey].totalPaid += amt;
-        folders[folderKey].balance = folders[folderKey].totalPaid - folders[folderKey].totalPurchased;
-        
-        let registry = JSON.parse(localStorage.getItem('globalInvoicesRegistry'));
-        registry.push(paymentEntry);
+        folders[key].entries.push({ billNo: 'CASH-DEP', date: new Date().toLocaleDateString('en-IN'), total: amt, status: 'Paid' });
+        folders[key].totalPaid += amt;
+        folders[key].balance = folders[key].totalPaid - folders[key].totalPurchased;
         
         localStorage.setItem('customerLedgerFolders', JSON.stringify(folders));
-        localStorage.setItem('globalInvoicesRegistry', JSON.stringify(registry));
-
-        document.getElementById('pay-cname').value = '';
-        document.getElementById('pay-caddr').value = '';
-        document.getElementById('pay-amount').value = '';
         
-        showToast("Payment Processed.");
+        document.getElementById('pay-cname').value = '';
+        document.getElementById('pay-amount').value = '';
         renderLedgerRegistry();
+        showToast("Cash Account Deposit Saved.");
     }
 
     function renderLedgerRegistry() {
-        const container = document.getElementById('ledger-history-container');
         let folders = JSON.parse(localStorage.getItem('customerLedgerFolders'));
-        
-        if(Object.keys(folders).length === 0) {
-            container.innerHTML = `<p style="color:var(--muted);">No folders active in registry ledger.</p>`;
-            return;
-        }
-
         let html = '';
-        for(let key in folders) {
-            let f = folders[key];
-            let balStatus = f.balance < 0 ? `<span style="color:var(--danger);">Bakaya (Udhaar): ₹${Math.abs(f.balance).toFixed(2)} (Minus)</span>` : `<span style="color:var(--accent);">Clear/Advance: ₹${f.balance.toFixed(2)}</span>`;
-            
+        for(let k in folders) {
+            let f = folders[k];
+            let ledgerState = f.balance < 0 ? `<b style="color:var(--danger);">Bakaya Ledger: ₹${Math.abs(f.balance).toFixed(2)} (Minus)</b>` : `<b style="color:var(--accent);">Clear: ₹${f.balance.toFixed(2)}</b>`;
             html += `<div class="history-card" data-searchable="${f.name.toLowerCase()} ${f.address.toLowerCase()}">
-                <h3 style="color:var(--accent); margin-top:0; margin-bottom:5px;">📂 Account Folder: ${f.name}</h3>
-                <p style="margin:2px 0; font-size:13px; color:var(--muted);">📍 Address: ${f.address}</p>
-                <div style="display:flex; gap:25px; margin:12px 0; padding:10px; background:#0e170e; border-radius:6px; font-size:13px;">
-                    <div>Total Purchased: <b>₹${f.totalPurchased.toFixed(2)}</b></div>
-                    <div>Total Paid: <b>₹${f.totalPaid.toFixed(2)}</b></div>
-                    <div>Status: <b>${balStatus}</b></div>
-                </div>
-                <h4 style="margin-bottom:6px; font-size:13px;">Linked Slips History:</h4>
-                <div style="max-height:200px; overflow-y:auto; font-size:12px;">
-                    <table style="width:100%; border-collapse:collapse; text-align:left;">
-                        <thead>
-                            <tr style="color:var(--accent);">
-                                <th>Slip No.</th><th>Date</th><th>Amount</th><th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${f.entries.map(e => `
-                                <tr style="border-bottom:1px solid #112211;">
-                                    <td>${e.billNo}</td><td>${e.date}</td><td>₹${e.totalAmount}</td>
-                                    <td><span class="status-pill status-${e.status.toLowerCase()}">${e.status}</span></td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
+                <h3>📂 Folder Node: ${f.name} (${f.address})</h3>
+                <p>Bought Cumulative: ₹${f.totalPurchased.toFixed(2)} | Deposited Asset: ₹${f.totalPaid.toFixed(2)}</p>
+                <p>Status: ${ledgerState}</p>
+                <table style="width:100%; font-size:12px; margin-top:5px; border-top:1px solid #222;">
+                    ${f.entries.map(e => `<tr><td>Bill: ${e.billNo}</td><td>${e.date}</td><td>₹${e.total.toFixed(2)}</td><td>${e.status}</td></tr>`).join('')}
+                </table>
             </div>`;
         }
-        container.innerHTML = html;
+        document.getElementById('ledger-history-container').innerHTML = html || 'No data logs setup.';
     }
 
     function searchLedgerRegistry() {
         const txt = document.getElementById('ledger-search-input').value.toLowerCase();
-        document.querySelectorAll('.history-card').forEach(card => {
-            const searchable = card.getAttribute('data-searchable');
-            if(searchable.includes(txt)) card.style.display = 'block';
-            else card.style.display = 'none';
+        document.querySelectorAll('.history-card').forEach(c => {
+            c.style.display = c.getAttribute('data-searchable').includes(txt) ? 'block' : 'none';
         });
     }
 
-    function shareInvoiceOnWhatsApp() {
-        if(cart.length === 0) { alert("Cart is empty!"); return; }
-        const phone = document.getElementById('c-phone').value.trim();
-        if(!phone) { alert("Enter Phone Number!"); return; }
-        
-        const custName = document.getElementById('c-name').value || "Customer";
-        const billNo = localStorage.getItem('billIndexCount') || '1';
-        let total = document.getElementById('bill-total').innerText;
-        const status = document.getElementById('bill-status-selector').value;
-        
-        let messageText = `*SHRADDHA HARDWARE INVOICE*%0A------------------------------%0A*Bill No:* ${billNo}%0A*Customer:* ${custName}%0A*Status:* ${status}%0A------------------------------%0A`;
-        cart.forEach((item, index) => {
-            let net = item.qty * (item.rate - item.discountPerPc);
-            messageText += `${index+1}. ${item.name} x ${item.qty} = ₹${net.toFixed(2)}%0A`;
-        });
-        messageText += `------------------------------%0A*Total Payable:* ₹${total}%0A%0A_Photo Invoice Generated! Please ask shopkeeper for the bill picture._`;
-        
-        let cleanPhone = phone.replace(/\D/g, '');
-        if(cleanPhone.length === 10) cleanPhone = "91" + cleanPhone;
-        window.open(`https://api.whatsapp.com/send?phone=${cleanPhone}&text=${messageText}`, '_blank');
+    function startEditMode(p) {
+        document.getElementById('edit-prod-id').value = p.id;
+        document.getElementById('prod-name').value = p.name;
+        document.getElementById('prod-name-hi').value = p.nameHi || '';
+        document.getElementById('prod-unit').value = p.unit || 'Pcs';
+        document.getElementById('prod-buy').value = p.buyPrice;
+        document.getElementById('prod-sell').value = p.sellPrice;
+        document.getElementById('prod-qty').value = p.stockInfo;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.getElementById('stock-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const editId = document.getElementById('edit-prod-id').value;
+        const fd = new FormData();
+        fd.append('name', document.getElementById('prod-name').value);
+        fd.append('nameHi', document.getElementById('prod-name-hi').value);
+        fd.append('unit', document.getElementById('prod-unit').value);
+        fd.append('buyPrice', document.getElementById('prod-buy').value);
+        fd.append('sellPrice', document.getElementById('prod-sell').value);
+        fd.append('stockInfo', document.getElementById('prod-qty').value);
+
+        let URL = editId ? `${API_URL}/${editId}` : API_URL;
+        let method = editId ? 'PUT' : 'POST';
+
+        const res = await fetch(URL, { method: method, headers: { 'X-Admin-Secret': SECURE_KEY }, body: fd });
+        if(res.ok) {
+            showToast("Warehouse matrix sync complete.");
+            document.getElementById('stock-form').reset();
+            document.getElementById('edit-prod-id').value = '';
+            loadSystemData();
+        }
+    });
+
+    async function deleteAssetItem(id) {
+        if(!confirm("Destroy stock entry?")) return;
+        const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE', headers: { 'X-Admin-Secret': SECURE_KEY } });
+        if(res.ok) { showToast("Record destroyed."); loadSystemData(); }
     }
 
     async function triggerStockDeductionEngine() {
@@ -706,17 +481,10 @@
             if(prod) {
                 const fd = new FormData();
                 fd.append('name', prod.name);
-                fd.append('nameHi', prod.nameHi || '');
-                fd.append('unit', prod.unit || 'Pcs');
                 fd.append('buyPrice', prod.buyPrice);
                 fd.append('sellPrice', prod.sellPrice);
                 fd.append('stockInfo', parseFloat(prod.stockInfo || 0) - item.qty);
-
-                await fetch(API_URL + '/' + prod.id, {
-                    method: 'PUT',
-                    headers: { 'X-Admin-Secret': SECURE_KEY },
-                    body: fd
-                });
+                await fetch(API_URL + '/' + prod.id, { method: 'PUT', headers: { 'X-Admin-Secret': SECURE_KEY }, body: fd });
             }
         }
         loadSystemData();
@@ -724,17 +492,8 @@
         updateBillUI();
     }
 
-    document.getElementById('search-bar').addEventListener('input', (e) => {
-        const txt = e.target.value.toLowerCase();
-        renderCustomerCatalog(allProducts.filter(p => p.name.toLowerCase().includes(txt) || (p.nameHi && p.nameHi.toLowerCase().includes(txt))));
-    });
-
-    document.getElementById('search-private').addEventListener('input', (e) => {
-        const txt = e.target.value.toLowerCase();
-        renderPrivateCatalog(allProducts.filter(p => p.name.toLowerCase().includes(txt) || (p.nameHi && p.nameHi.toLowerCase().includes(txt))));
-    });
-
     window.onload = loadSystemData;
 </script>
 </body>
 </html>
+
